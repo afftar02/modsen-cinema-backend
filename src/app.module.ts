@@ -1,7 +1,5 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { ReviewModule } from './review/review.module';
 import { Review } from './review/entities/review.entity';
 
@@ -19,7 +17,5 @@ import { Review } from './review/entities/review.entity';
     }),
     ReviewModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
 })
 export class AppModule {}
