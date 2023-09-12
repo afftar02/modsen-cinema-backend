@@ -24,7 +24,7 @@ export class ReviewService {
     const review = await this.repository.findOneBy({ id });
 
     if (!review) {
-      throw new NotFoundException('Отзыв не найден');
+      throw new NotFoundException('Review not found');
     }
 
     return review;
@@ -34,7 +34,7 @@ export class ReviewService {
     const review = await this.repository.findOneBy({ id });
 
     if (!review) {
-      throw new NotFoundException('Отзыв не найден');
+      throw new NotFoundException('Review not found');
     }
 
     return this.repository.update(id, dto);
@@ -44,7 +44,7 @@ export class ReviewService {
     const review = await this.repository.findOneBy({ id });
 
     if (!review) {
-      throw new NotFoundException('Отзыв не найден');
+      throw new NotFoundException('Review not found');
     }
 
     return this.repository.delete(id);
