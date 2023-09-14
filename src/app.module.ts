@@ -5,6 +5,8 @@ import { Review } from './review/entities/review.entity';
 import { ConfigModule } from '@nestjs/config';
 import { CountryModule } from './country/country.module';
 import { Country } from './country/entities/country.entity';
+import { ActorModule } from './actor/actor.module';
+import { Actor } from './actor/entities/actor.entity';
 
 @Module({
   imports: [
@@ -16,11 +18,12 @@ import { Country } from './country/entities/country.entity';
       username: process.env.DB_USER,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
-      entities: [Review, Country],
+      entities: [Review, Country, Actor],
       synchronize: true,
     }),
     ReviewModule,
     CountryModule,
+    ActorModule,
   ],
 })
 export class AppModule {}
