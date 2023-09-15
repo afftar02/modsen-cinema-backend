@@ -7,6 +7,8 @@ import { CountryModule } from './country/country.module';
 import { Country } from './country/entities/country.entity';
 import { ActorModule } from './actor/actor.module';
 import { Actor } from './actor/entities/actor.entity';
+import { GenreModule } from './genre/genre.module';
+import { Genre } from './genre/entities/genre.entity';
 
 @Module({
   imports: [
@@ -18,12 +20,13 @@ import { Actor } from './actor/entities/actor.entity';
       username: process.env.DB_USER,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
-      entities: [Review, Country, Actor],
+      entities: [Review, Country, Actor, Genre],
       synchronize: true,
     }),
     ReviewModule,
     CountryModule,
     ActorModule,
+    GenreModule,
   ],
 })
 export class AppModule {}
