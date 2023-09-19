@@ -21,7 +21,10 @@ export class CountryService {
   }
 
   async findOne(id: number) {
-    const country = await this.repository.findOneBy({ id });
+    const country = await this.repository.findOne({
+      where: { id },
+      relations: { movies: true },
+    });
 
     if (!country) {
       throw new NotFoundException('Country not found');

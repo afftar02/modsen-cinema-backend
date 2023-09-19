@@ -9,6 +9,8 @@ import { ActorModule } from './actor/actor.module';
 import { Actor } from './actor/entities/actor.entity';
 import { GenreModule } from './genre/genre.module';
 import { Genre } from './genre/entities/genre.entity';
+import { MovieModule } from './movie/movie.module';
+import { Movie } from './movie/entities/movie.entity';
 
 @Module({
   imports: [
@@ -20,13 +22,14 @@ import { Genre } from './genre/entities/genre.entity';
       username: process.env.DB_USER,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
-      entities: [Review, Country, Actor, Genre],
+      entities: [Review, Country, Actor, Genre, Movie],
       synchronize: true,
     }),
     ReviewModule,
     CountryModule,
     ActorModule,
     GenreModule,
+    MovieModule,
   ],
 })
 export class AppModule {}

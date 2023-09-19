@@ -17,4 +17,8 @@ export class CreateReviewDto {
   @Min(0, { message: 'Rating must be equal or greater than 0' })
   @Max(10, { message: 'Rating must be equal or less than 10' })
   rating: number;
+
+  @ApiProperty()
+  @IsNotEmpty({ message: 'Movie id cannot be empty' })
+  movieId: number;
 }
