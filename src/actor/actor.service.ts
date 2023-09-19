@@ -2,7 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateActorDto } from './dto/create-actor.dto';
 import { UpdateActorDto } from './dto/update-actor.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { Actor } from './entities/actor.entity';
 
 @Injectable()
@@ -20,8 +20,17 @@ export class ActorService {
     return this.repository.find();
   }
 
+  findByIds(ids: number[]) {
+    return this.repository.findBy({
+      id: In(ids),
+    });
+  }
+
   async findOne(id: number) {
-    const actor = await this.repository.findOneBy({ id });
+    const actor = await this.repository.findOne({
+      where: { id },
+      relations: { movies: true },
+    });
 
     if (!actor) {
       throw new NotFoundException('Actor not found');
@@ -41,11 +50,18 @@ export class ActorService {
   }
 
   async remove(id: number) {
-    const actor = await this.repository.findOneBy({ id });
+    const actor = await this.repository.findOne({
+      where: { id },
+      relations: { movies: true },
+    });
 
     if (!actor) {
       throw new NotFoundException('Actor not found');
     }
+
+    actor.movies = [];
+
+    await this.repository.save(actor);
 
     return this.repository.delete(id);
   }

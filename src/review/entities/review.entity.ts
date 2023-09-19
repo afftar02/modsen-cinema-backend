@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Movie } from '../../movie/entities/movie.entity';
 
 @Entity('review')
 export class Review {
@@ -13,4 +14,10 @@ export class Review {
 
   @Column({ type: 'real' })
   rating: number;
+
+  @ManyToOne(() => Movie, (movie) => movie.reviews, {
+    nullable: false,
+    onDelete: 'CASCADE',
+  })
+  movie: Movie;
 }

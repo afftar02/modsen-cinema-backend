@@ -1,27 +1,53 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateReviewDto } from './dto/create-review.dto';
 import { UpdateReviewDto } from './dto/update-review.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Review } from './entities/review.entity';
 import { Repository } from 'typeorm';
+import { MovieService } from '../movie/movie.service';
 
 @Injectable()
 export class ReviewService {
   constructor(
     @InjectRepository(Review)
     private repository: Repository<Review>,
+    @Inject(MovieService)
+    private movieService: MovieService,
   ) {}
 
-  create(dto: CreateReviewDto) {
-    return this.repository.save(dto);
+  async create(dto: CreateReviewDto) {
+    const review = this.repository.create(dto);
+
+    review.movie = await this.movieService.findOne(dto.movieId);
+
+    return this.repository.save(review);
   }
 
   findAll() {
-    return this.repository.find();
+    return this.repository.find({
+      relations: {
+        movie: true,
+      },
+      select: {
+        movie: {
+          id: true,
+        },
+      },
+    });
   }
 
   async findOne(id: number) {
-    const review = await this.repository.findOneBy({ id });
+    const review = await this.repository.findOne({
+      where: { id },
+      relations: {
+        movie: true,
+      },
+      select: {
+        movie: {
+          id: true,
+        },
+      },
+    });
 
     if (!review) {
       throw new NotFoundException('Review not found');
@@ -37,7 +63,13 @@ export class ReviewService {
       throw new NotFoundException('Review not found');
     }
 
-    return this.repository.update(id, dto);
+    const updateReview = this.repository.create(dto);
+
+    if (dto.movieId) {
+      updateReview.movie = await this.movieService.findOne(dto.movieId);
+    }
+
+    return this.repository.update(id, updateReview);
   }
 
   async remove(id: number) {

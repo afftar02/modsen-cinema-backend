@@ -2,7 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateGenreDto } from './dto/create-genre.dto';
 import { UpdateGenreDto } from './dto/update-genre.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { Genre } from './entities/genre.entity';
 
 @Injectable()
@@ -20,8 +20,17 @@ export class GenreService {
     return this.repository.find();
   }
 
+  findByIds(ids: number[]) {
+    return this.repository.findBy({
+      id: In(ids),
+    });
+  }
+
   async findOne(id: number) {
-    const genre = await this.repository.findOneBy({ id });
+    const genre = await this.repository.findOne({
+      where: { id },
+      relations: { movies: true },
+    });
 
     if (!genre) {
       throw new NotFoundException('Genre not found');
@@ -41,11 +50,18 @@ export class GenreService {
   }
 
   async remove(id: number) {
-    const genre = await this.repository.findOneBy({ id });
+    const genre = await this.repository.findOne({
+      where: { id },
+      relations: { movies: true },
+    });
 
     if (!genre) {
       throw new NotFoundException('Genre not found');
     }
+
+    genre.movies = [];
+
+    await this.repository.save(genre);
 
     return this.repository.delete(id);
   }

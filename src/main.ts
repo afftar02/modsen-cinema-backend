@@ -1,13 +1,29 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { ValidationPipe } from '@nestjs/common';
+import {
+  BadRequestException,
+  ValidationPipe,
+  ValidationError,
+} from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, { cors: false });
 
   app.enableCors({ credentials: true, origin: true });
-  app.useGlobalPipes(new ValidationPipe());
+  app.useGlobalPipes(
+    new ValidationPipe({
+      transform: true,
+      exceptionFactory: (validationErrors: ValidationError[] = []) => {
+        const errors = validationErrors.map((error) => ({
+          property: error.property,
+          constraints: error.constraints,
+        }));
+
+        return new BadRequestException(errors);
+      },
+    }),
+  );
 
   const config = new DocumentBuilder()
     .setTitle('Cinema-modsen')
