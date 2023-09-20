@@ -16,6 +16,16 @@ export class PosterService {
     return this.repository.save(file);
   }
 
+  async findOne(id: number) {
+    const poster = await this.repository.findOneBy({ id });
+
+    if (!poster) {
+      throw new NotFoundException('Poster not found');
+    }
+
+    return poster;
+  }
+
   async remove(id: number) {
     const poster = await this.repository.findOneBy({ id });
 

@@ -7,6 +7,7 @@ import { Movie } from './entities/movie.entity';
 import { CountryService } from '../country/country.service';
 import { ActorService } from '../actor/actor.service';
 import { GenreService } from '../genre/genre.service';
+import { PosterService } from '../poster/poster.service';
 
 @Injectable()
 export class MovieService {
@@ -19,6 +20,8 @@ export class MovieService {
     private actorService: ActorService,
     @Inject(GenreService)
     private genreService: GenreService,
+    @Inject(PosterService)
+    private posterService: PosterService,
   ) {}
 
   async bindRelations(movie: Movie, dto: CreateMovieDto | UpdateMovieDto) {
@@ -31,6 +34,9 @@ export class MovieService {
     if (dto.genreIds) {
       movie.genres = await this.genreService.findByIds(dto.genreIds);
     }
+    if (dto.posterId) {
+      movie.poster = await this.posterService.findOne(dto.posterId);
+    }
   }
 
   async create(dto: CreateMovieDto) {
@@ -42,7 +48,12 @@ export class MovieService {
   }
 
   findAll() {
-    return this.repository.find();
+    return this.repository.find({
+      relations: {
+        genres: true,
+        poster: true,
+      },
+    });
   }
 
   async findOne(id: number) {
@@ -53,6 +64,7 @@ export class MovieService {
         country: true,
         actors: true,
         genres: true,
+        poster: true,
       },
     });
 
@@ -64,7 +76,12 @@ export class MovieService {
   }
 
   async update(id: number, dto: UpdateMovieDto) {
-    const movie = await this.repository.findOneBy({ id });
+    const movie = await this.repository.findOne({
+      where: { id },
+      relations: {
+        poster: true,
+      },
+    });
 
     if (!movie) {
       throw new NotFoundException('Movie not found');
@@ -77,14 +94,27 @@ export class MovieService {
 
     await this.bindRelations(updateMovie, dto);
 
+    if (dto.posterId) {
+      await this.posterService.remove(movie.poster.id);
+    }
+
     return this.repository.save(updateMovie);
   }
 
   async remove(id: number) {
-    const movie = await this.repository.findOneBy({ id });
+    const movie = await this.repository.findOne({
+      where: { id },
+      relations: {
+        poster: true,
+      },
+    });
 
     if (!movie) {
       throw new NotFoundException('Movie not found');
+    }
+
+    if (movie.poster) {
+      await this.posterService.remove(movie.poster.id);
     }
 
     return this.repository.delete(id);
