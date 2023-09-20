@@ -8,6 +8,7 @@ import { CountryService } from '../country/country.service';
 import { ActorService } from '../actor/actor.service';
 import { GenreService } from '../genre/genre.service';
 import { PosterService } from '../poster/poster.service';
+import { TrailerService } from '../trailer/trailer.service';
 
 @Injectable()
 export class MovieService {
@@ -22,6 +23,8 @@ export class MovieService {
     private genreService: GenreService,
     @Inject(PosterService)
     private posterService: PosterService,
+    @Inject(TrailerService)
+    private trailerService: TrailerService,
   ) {}
 
   async bindRelations(movie: Movie, dto: CreateMovieDto | UpdateMovieDto) {
@@ -36,6 +39,9 @@ export class MovieService {
     }
     if (dto.posterId) {
       movie.poster = await this.posterService.findOne(dto.posterId);
+    }
+    if (dto.trailerId) {
+      movie.trailer = await this.trailerService.findOne(dto.trailerId);
     }
   }
 
@@ -65,6 +71,7 @@ export class MovieService {
         actors: true,
         genres: true,
         poster: true,
+        trailer: true,
       },
     });
 
@@ -80,6 +87,7 @@ export class MovieService {
       where: { id },
       relations: {
         poster: true,
+        trailer: true,
       },
     });
 
@@ -97,6 +105,9 @@ export class MovieService {
     if (dto.posterId) {
       await this.posterService.remove(movie.poster.id);
     }
+    if (dto.trailerId) {
+      await this.trailerService.remove(movie.trailer.id);
+    }
 
     return this.repository.save(updateMovie);
   }
@@ -106,6 +117,7 @@ export class MovieService {
       where: { id },
       relations: {
         poster: true,
+        trailer: true,
       },
     });
 
@@ -115,6 +127,9 @@ export class MovieService {
 
     if (movie.poster) {
       await this.posterService.remove(movie.poster.id);
+    }
+    if (movie.trailer) {
+      await this.trailerService.remove(movie.trailer.id);
     }
 
     return this.repository.delete(id);

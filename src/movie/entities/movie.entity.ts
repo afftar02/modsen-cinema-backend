@@ -14,6 +14,7 @@ import { Country } from '../../country/entities/country.entity';
 import { Actor } from '../../actor/entities/actor.entity';
 import { Genre } from '../../genre/entities/genre.entity';
 import { Poster } from '../../poster/entities/poster.entity';
+import { Trailer } from '../../trailer/entities/trailer.entity';
 
 @Entity('movie')
 export class Movie {
@@ -63,4 +64,11 @@ export class Movie {
   })
   @JoinColumn()
   poster: Poster;
+
+  @OneToOne(() => Trailer, {
+    nullable: true,
+    onDelete: 'SET NULL',
+  })
+  @JoinColumn()
+  trailer: Trailer;
 }
