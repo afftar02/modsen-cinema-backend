@@ -73,4 +73,8 @@ export class CreateMovieDto {
   @ApiProperty()
   @IsOptional()
   posterId: number;
+
+  @ApiProperty()
+  @IsOptional()
+  trailerId: number;
 }

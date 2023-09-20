@@ -7,6 +7,7 @@ import { CountryModule } from '../country/country.module';
 import { ActorModule } from '../actor/actor.module';
 import { GenreModule } from '../genre/genre.module';
 import { PosterModule } from '../poster/poster.module';
+import { TrailerModule } from '../trailer/trailer.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { PosterModule } from '../poster/poster.module';
     ActorModule,
     GenreModule,
     PosterModule,
+    TrailerModule,
   ],
   controllers: [MovieController],
   providers: [MovieService],
