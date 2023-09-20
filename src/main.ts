@@ -6,6 +6,8 @@ import {
   ValidationError,
 } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import * as express from 'express';
+import { join } from 'path';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, { cors: false });
@@ -24,6 +26,7 @@ async function bootstrap() {
       },
     }),
   );
+  app.use('/uploads', express.static(join(__dirname, '..', 'uploads')));
 
   const config = new DocumentBuilder()
     .setTitle('Cinema-modsen')

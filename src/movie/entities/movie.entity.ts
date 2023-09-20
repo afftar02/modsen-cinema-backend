@@ -1,16 +1,19 @@
 import {
   Column,
   Entity,
+  JoinColumn,
   JoinTable,
   ManyToMany,
   ManyToOne,
   OneToMany,
+  OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Review } from '../../review/entities/review.entity';
 import { Country } from '../../country/entities/country.entity';
 import { Actor } from '../../actor/entities/actor.entity';
 import { Genre } from '../../genre/entities/genre.entity';
+import { Poster } from '../../poster/entities/poster.entity';
 
 @Entity('movie')
 export class Movie {
@@ -53,4 +56,11 @@ export class Movie {
   @ManyToMany(() => Genre, (genre) => genre.movies)
   @JoinTable()
   genres: Genre[];
+
+  @OneToOne(() => Poster, {
+    nullable: true,
+    onDelete: 'SET NULL',
+  })
+  @JoinColumn()
+  poster: Poster;
 }

@@ -69,4 +69,8 @@ export class CreateMovieDto {
   @IsOptional()
   @IsArray()
   genreIds: number[];
+
+  @ApiProperty()
+  @IsOptional()
+  posterId: number;
 }
