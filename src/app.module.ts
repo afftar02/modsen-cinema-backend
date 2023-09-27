@@ -15,6 +15,8 @@ import { PosterModule } from './poster/poster.module';
 import { Poster } from './poster/entities/poster.entity';
 import { TrailerModule } from './trailer/trailer.module';
 import { Trailer } from './trailer/entities/trailer.entity';
+import { SessionModule } from './session/session.module';
+import { Session } from './session/entities/session.entity';
 
 @Module({
   imports: [
@@ -26,7 +28,16 @@ import { Trailer } from './trailer/entities/trailer.entity';
       username: process.env.DB_USER,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
-      entities: [Review, Country, Actor, Genre, Movie, Poster, Trailer],
+      entities: [
+        Review,
+        Country,
+        Actor,
+        Genre,
+        Movie,
+        Poster,
+        Trailer,
+        Session,
+      ],
       synchronize: true,
     }),
     ReviewModule,
@@ -36,6 +47,7 @@ import { Trailer } from './trailer/entities/trailer.entity';
     MovieModule,
     PosterModule,
     TrailerModule,
+    SessionModule,
   ],
 })
 export class AppModule {}

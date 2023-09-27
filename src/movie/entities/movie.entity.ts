@@ -15,6 +15,7 @@ import { Actor } from '../../actor/entities/actor.entity';
 import { Genre } from '../../genre/entities/genre.entity';
 import { Poster } from '../../poster/entities/poster.entity';
 import { Trailer } from '../../trailer/entities/trailer.entity';
+import { Session } from '../../session/entities/session.entity';
 
 @Entity('movie')
 export class Movie {
@@ -71,4 +72,7 @@ export class Movie {
   })
   @JoinColumn()
   trailer: Trailer;
+
+  @OneToMany(() => Session, (session) => session.movie)
+  sessions: Session[];
 }
