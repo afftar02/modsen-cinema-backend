@@ -12,32 +12,32 @@ import { CreateCountryDto } from './dto/create-country.dto';
 import { UpdateCountryDto } from './dto/update-country.dto';
 import { ApiTags } from '@nestjs/swagger';
 
-@Controller('country')
+@Controller()
 @ApiTags('Country')
 export class CountryController {
   constructor(private readonly countryService: CountryService) {}
 
-  @Post()
+  @Post('country')
   create(@Body() dto: CreateCountryDto) {
     return this.countryService.create(dto);
   }
 
-  @Get()
+  @Get('countries')
   findAll() {
     return this.countryService.findAll();
   }
 
-  @Get(':id')
+  @Get('country/:id')
   findOne(@Param('id') id: string) {
     return this.countryService.findOne(+id);
   }
 
-  @Patch(':id')
+  @Patch('country/:id')
   update(@Param('id') id: string, @Body() updateCountryDto: UpdateCountryDto) {
     return this.countryService.update(+id, updateCountryDto);
   }
 
-  @Delete(':id')
+  @Delete('country/:id')
   remove(@Param('id') id: string) {
     return this.countryService.remove(+id);
   }
