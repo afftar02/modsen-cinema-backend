@@ -34,17 +34,25 @@ export class SessionService {
     return this.repository.save(session);
   }
 
-  findAll() {
-    return this.repository.find({
-      relations: {
-        movie: true,
-      },
-      select: {
+  async findMovieSessions(movieId: number, date: Date) {
+    let sessions = await this.repository.find({
+      where: {
         movie: {
-          id: true,
+          id: movieId,
         },
       },
     });
+
+    if (date.getDate()) {
+      sessions = sessions.filter(
+        (session) =>
+          session.start.getFullYear() === date.getFullYear() &&
+          session.start.getMonth() === date.getMonth() &&
+          session.start.getDay() === date.getDay(),
+      );
+    }
+
+    return sessions;
   }
 
   async findOne(id: number) {
