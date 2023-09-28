@@ -12,32 +12,32 @@ import { CreateGenreDto } from './dto/create-genre.dto';
 import { UpdateGenreDto } from './dto/update-genre.dto';
 import { ApiTags } from '@nestjs/swagger';
 
-@Controller('genre')
+@Controller()
 @ApiTags('Genre')
 export class GenreController {
   constructor(private readonly genreService: GenreService) {}
 
-  @Post()
+  @Post('genre')
   create(@Body() dto: CreateGenreDto) {
     return this.genreService.create(dto);
   }
 
-  @Get()
+  @Get('genres')
   findAll() {
     return this.genreService.findAll();
   }
 
-  @Get(':id')
+  @Get('genre/:id')
   findOne(@Param('id') id: string) {
     return this.genreService.findOne(+id);
   }
 
-  @Patch(':id')
+  @Patch('genre/:id')
   update(@Param('id') id: string, @Body() updateGenreDto: UpdateGenreDto) {
     return this.genreService.update(+id, updateGenreDto);
   }
 
-  @Delete(':id')
+  @Delete('genre/:id')
   remove(@Param('id') id: string) {
     return this.genreService.remove(+id);
   }

@@ -12,32 +12,32 @@ import { CreateActorDto } from './dto/create-actor.dto';
 import { UpdateActorDto } from './dto/update-actor.dto';
 import { ApiTags } from '@nestjs/swagger';
 
-@Controller('actor')
+@Controller()
 @ApiTags('Actor')
 export class ActorController {
   constructor(private readonly actorService: ActorService) {}
 
-  @Post()
+  @Post('actor')
   create(@Body() dto: CreateActorDto) {
     return this.actorService.create(dto);
   }
 
-  @Get()
+  @Get('actors')
   findAll() {
     return this.actorService.findAll();
   }
 
-  @Get(':id')
+  @Get('actor/:id')
   findOne(@Param('id') id: string) {
     return this.actorService.findOne(+id);
   }
 
-  @Patch(':id')
+  @Patch('actor/:id')
   update(@Param('id') id: string, @Body() updateActorDto: UpdateActorDto) {
     return this.actorService.update(+id, updateActorDto);
   }
 
-  @Delete(':id')
+  @Delete('actor/:id')
   remove(@Param('id') id: string) {
     return this.actorService.remove(+id);
   }

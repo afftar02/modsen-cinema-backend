@@ -12,32 +12,32 @@ import { CreateMovieDto } from './dto/create-movie.dto';
 import { UpdateMovieDto } from './dto/update-movie.dto';
 import { ApiTags } from '@nestjs/swagger';
 
-@Controller('movie')
+@Controller()
 @ApiTags('Movie')
 export class MovieController {
   constructor(private readonly movieService: MovieService) {}
 
-  @Post()
+  @Post('movie')
   create(@Body() dto: CreateMovieDto) {
     return this.movieService.create(dto);
   }
 
-  @Get()
+  @Get('movies')
   findAll() {
     return this.movieService.findAll();
   }
 
-  @Get(':id')
+  @Get('movie/:id')
   findOne(@Param('id') id: string) {
     return this.movieService.findOne(+id);
   }
 
-  @Patch(':id')
+  @Patch('movie/:id')
   update(@Param('id') id: string, @Body() updateMovieDto: UpdateMovieDto) {
     return this.movieService.update(+id, updateMovieDto);
   }
 
-  @Delete(':id')
+  @Delete('movie/:id')
   remove(@Param('id') id: string) {
     return this.movieService.remove(+id);
   }
