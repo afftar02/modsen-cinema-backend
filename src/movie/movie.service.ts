@@ -72,7 +72,6 @@ export class MovieService {
         genres: true,
         poster: true,
         trailer: true,
-        sessions: true,
       },
     });
 
