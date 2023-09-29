@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty } from 'class-validator';
+import { ArrayNotEmpty, IsArray, IsNotEmpty } from 'class-validator';
 
 export class CreateTicketDto {
   @ApiProperty()
@@ -9,4 +9,12 @@ export class CreateTicketDto {
   @ApiProperty()
   @IsNotEmpty({ message: 'IsVisited cannot be empty' })
   isVisited: boolean;
+
+  @ApiProperty({
+    type: [Number],
+    required: true,
+  })
+  @IsArray()
+  @ArrayNotEmpty()
+  seatIds: number[];
 }

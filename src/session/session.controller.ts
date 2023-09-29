@@ -32,11 +32,6 @@ export class SessionController {
     return this.sessionService.findMovieSessions(+movieId, date);
   }
 
-  @Get('session/:id')
-  findOne(@Param('id') id: string) {
-    return this.sessionService.findOne(+id);
-  }
-
   @Patch('session/:id')
   update(@Param('id') id: string, @Body() updateSessionDto: UpdateSessionDto) {
     return this.sessionService.update(+id, updateSessionDto);
