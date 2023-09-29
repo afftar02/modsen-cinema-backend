@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { CreateActorDto } from './dto/create-actor.dto';
 import { UpdateActorDto } from './dto/update-actor.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -10,6 +10,7 @@ export class ActorService {
   constructor(
     @InjectRepository(Actor)
     private repository: Repository<Actor>,
+    private readonly logger: Logger,
   ) {}
 
   create(dto: CreateActorDto) {
@@ -33,7 +34,11 @@ export class ActorService {
     });
 
     if (!actor) {
-      throw new NotFoundException('Actor not found');
+      const notFoundException = new NotFoundException('Actor not found');
+
+      this.logger.error('Unable to find actor', notFoundException.stack);
+
+      throw notFoundException;
     }
 
     return actor;
@@ -43,7 +48,11 @@ export class ActorService {
     const actor = await this.repository.findOneBy({ id });
 
     if (!actor) {
-      throw new NotFoundException('Actor not found');
+      const notFoundException = new NotFoundException('Actor not found');
+
+      this.logger.error('Unable to find actor', notFoundException.stack);
+
+      throw notFoundException;
     }
 
     return this.repository.update(id, dto);
@@ -56,7 +65,11 @@ export class ActorService {
     });
 
     if (!actor) {
-      throw new NotFoundException('Actor not found');
+      const notFoundException = new NotFoundException('Actor not found');
+
+      this.logger.error('Unable to find actor', notFoundException.stack);
+
+      throw notFoundException;
     }
 
     actor.movies = [];

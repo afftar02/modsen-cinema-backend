@@ -8,9 +8,16 @@ import {
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import * as express from 'express';
 import { join } from 'path';
+import { WinstonModule } from 'nest-winston';
+import { instance } from '../logger/winston.logger';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule, { cors: false });
+  const app = await NestFactory.create(AppModule, {
+    cors: false,
+    logger: WinstonModule.createLogger({
+      instance: instance,
+    }),
+  });
 
   app.enableCors({ credentials: true, origin: true });
   app.useGlobalPipes(

@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Logger, Module } from '@nestjs/common';
 import { MovieService } from './movie.service';
 import { MovieController } from './movie.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -19,7 +19,7 @@ import { TrailerModule } from '../trailer/trailer.module';
     TrailerModule,
   ],
   controllers: [MovieController],
-  providers: [MovieService],
+  providers: [MovieService, Logger],
   exports: [MovieService],
 })
 export class MovieModule {}

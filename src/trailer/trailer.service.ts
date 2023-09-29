@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import * as fs from 'fs';
@@ -10,6 +10,7 @@ export class TrailerService {
   constructor(
     @InjectRepository(Trailer)
     private repository: Repository<Trailer>,
+    private readonly logger: Logger,
   ) {}
 
   create(file: Express.Multer.File) {
@@ -20,7 +21,11 @@ export class TrailerService {
     const trailer = await this.repository.findOneBy({ id });
 
     if (!trailer) {
-      throw new NotFoundException('Trailer not found');
+      const notFoundException = new NotFoundException('Trailer not found');
+
+      this.logger.error('Unable to find trailer', notFoundException.stack);
+
+      throw notFoundException;
     }
 
     return trailer;
@@ -30,7 +35,11 @@ export class TrailerService {
     const trailer = await this.repository.findOneBy({ id });
 
     if (!trailer) {
-      throw new NotFoundException('Trailer not found');
+      const notFoundException = new NotFoundException('Trailer not found');
+
+      this.logger.error('Unable to find trailer', notFoundException.stack);
+
+      throw notFoundException;
     }
 
     fs.unlink(FILES_PATH + trailer.filename, (err) => {

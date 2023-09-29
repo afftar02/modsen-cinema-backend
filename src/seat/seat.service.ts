@@ -3,6 +3,7 @@ import {
   ConflictException,
   Inject,
   Injectable,
+  Logger,
   NotFoundException,
 } from '@nestjs/common';
 import { CreateSeatDto } from './dto/create-seat.dto';
@@ -19,6 +20,7 @@ export class SeatService {
     private repository: Repository<Seat>,
     @Inject(SessionService)
     private sessionService: SessionService,
+    private readonly logger: Logger,
   ) {}
 
   async checkExistingSeat(
@@ -29,9 +31,16 @@ export class SeatService {
 
     sessionSeats.forEach((seat) => {
       if (dto.number === seat.number && dto.row === seat.row) {
-        throw new BadRequestException(
+        const badRequestException = new BadRequestException(
           'Seat with this number and row is already exists in current session!',
         );
+
+        this.logger.error(
+          'Seat is already exists in current session',
+          badRequestException.stack,
+        );
+
+        throw badRequestException;
       }
     });
   }
@@ -81,7 +90,11 @@ export class SeatService {
     });
 
     if (!seat) {
-      throw new NotFoundException('Seat not found');
+      const notFoundException = new NotFoundException('Seat not found');
+
+      this.logger.error('Unable to find seat', notFoundException.stack);
+
+      throw notFoundException;
     }
 
     await this.checkExistingSeat(seat.session.id, dto);
@@ -98,11 +111,24 @@ export class SeatService {
     });
 
     if (!seat) {
-      throw new NotFoundException('Seat not found');
+      const notFoundException = new NotFoundException('Seat not found');
+
+      this.logger.error('Unable to find seat', notFoundException.stack);
+
+      throw notFoundException;
     }
 
     if (seat.ticket) {
-      throw new ConflictException('Seat with ticket cannot be deleted!');
+      const conflictException = new ConflictException(
+        'Seat with ticket cannot be deleted!',
+      );
+
+      this.logger.error(
+        'Unable to delete seat with not-null ticket',
+        conflictException.stack,
+      );
+
+      throw conflictException;
     }
 
     return this.repository.delete(id);

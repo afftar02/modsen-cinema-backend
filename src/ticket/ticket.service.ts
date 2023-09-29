@@ -1,4 +1,4 @@
-import { Inject, Injectable, NotFoundException } from '@nestjs/common';
+import { Inject, Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { CreateTicketDto } from './dto/create-ticket.dto';
 import { UpdateTicketDto } from './dto/update-ticket.dto';
 import { Repository } from 'typeorm';
@@ -13,6 +13,7 @@ export class TicketService {
     private repository: Repository<Ticket>,
     @Inject(SeatService)
     private seatService: SeatService,
+    private readonly logger: Logger,
   ) {}
 
   async create(dto: CreateTicketDto) {
@@ -36,7 +37,11 @@ export class TicketService {
     });
 
     if (!ticket) {
-      throw new NotFoundException('Ticket not found');
+      const notFoundException = new NotFoundException('Ticket not found');
+
+      this.logger.error('Unable to find ticket', notFoundException.stack);
+
+      throw notFoundException;
     }
 
     return ticket;
@@ -46,7 +51,11 @@ export class TicketService {
     const ticket = await this.repository.findOneBy({ id });
 
     if (!ticket) {
-      throw new NotFoundException('Ticket not found');
+      const notFoundException = new NotFoundException('Ticket not found');
+
+      this.logger.error('Unable to find ticket', notFoundException.stack);
+
+      throw notFoundException;
     }
 
     const updateTicket = {
@@ -67,7 +76,11 @@ export class TicketService {
     });
 
     if (!ticket) {
-      throw new NotFoundException('Ticket not found');
+      const notFoundException = new NotFoundException('Ticket not found');
+
+      this.logger.error('Unable to find ticket', notFoundException.stack);
+
+      throw notFoundException;
     }
 
     return this.repository.delete(id);
