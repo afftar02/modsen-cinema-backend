@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Seat } from '../../seat/entities/seat.entity';
 
 @Entity('ticket')
 export class Ticket {
@@ -10,4 +11,7 @@ export class Ticket {
 
   @Column()
   isVisited: boolean;
+
+  @OneToMany(() => Seat, (seat) => seat.ticket)
+  seats: Seat[];
 }

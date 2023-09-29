@@ -19,6 +19,8 @@ import { SessionModule } from './session/session.module';
 import { Session } from './session/entities/session.entity';
 import { TicketModule } from './ticket/ticket.module';
 import { Ticket } from './ticket/entities/ticket.entity';
+import { SeatModule } from './seat/seat.module';
+import { Seat } from './seat/entities/seat.entity';
 
 @Module({
   imports: [
@@ -40,6 +42,7 @@ import { Ticket } from './ticket/entities/ticket.entity';
         Trailer,
         Session,
         Ticket,
+        Seat,
       ],
       synchronize: true,
     }),
@@ -52,6 +55,7 @@ import { Ticket } from './ticket/entities/ticket.entity';
     TrailerModule,
     SessionModule,
     TicketModule,
+    SeatModule,
   ],
 })
 export class AppModule {}

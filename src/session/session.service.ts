@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  ConflictException,
   Inject,
   Injectable,
   NotFoundException,
@@ -35,20 +36,23 @@ export class SessionService {
   }
 
   async findMovieSessions(movieId: number, date: Date) {
-    let sessions = await this.repository.find({
-      where: {
-        movie: {
-          id: movieId,
-        },
-      },
-    });
+    let sessions = await this.repository
+      .createQueryBuilder('session')
+      .where('session.movieId = :movieId', { movieId: movieId })
+      .loadRelationCountAndMap(
+        'session.availableSeats',
+        'session.seats',
+        'seat',
+        (qb) => qb.where('seat.ticketId IS NULL'),
+      )
+      .getMany();
 
     if (date.getDate()) {
       sessions = sessions.filter(
         (session) =>
           session.start.getFullYear() === date.getFullYear() &&
           session.start.getMonth() === date.getMonth() &&
-          session.start.getDay() === date.getDay(),
+          session.start.getDate() === date.getDate(),
       );
     }
 
@@ -56,17 +60,7 @@ export class SessionService {
   }
 
   async findOne(id: number) {
-    const session = await this.repository.findOne({
-      where: { id },
-      relations: {
-        movie: true,
-      },
-      select: {
-        movie: {
-          id: true,
-        },
-      },
-    });
+    const session = await this.repository.findOneBy({ id });
 
     if (!session) {
       throw new NotFoundException('Session not found');
@@ -84,7 +78,11 @@ export class SessionService {
 
     const updateSession = this.repository.create(dto);
 
-    if (updateSession.start >= updateSession.end) {
+    if (
+      (dto.start && dto.end && updateSession.start >= updateSession.end) ||
+      (dto.start && !dto.end && updateSession.start >= session.end) ||
+      (dto.end && !dto.start && session.start >= updateSession.end)
+    ) {
       throw new BadRequestException(
         'Session start should be earlier than session end!',
       );
@@ -98,10 +96,21 @@ export class SessionService {
   }
 
   async remove(id: number) {
-    const session = await this.repository.findOneBy({ id });
+    const session = await this.repository.findOne({
+      where: { id },
+      relations: {
+        seats: {
+          ticket: true,
+        },
+      },
+    });
 
     if (!session) {
       throw new NotFoundException('Session not found');
+    }
+
+    if (session.seats.find((seat) => seat.ticket !== null)) {
+      throw new ConflictException('Seat with ticket cannot be deleted!');
     }
 
     return this.repository.delete(id);
