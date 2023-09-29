@@ -3,6 +3,7 @@ import {
   ConflictException,
   Inject,
   Injectable,
+  Logger,
   NotFoundException,
 } from '@nestjs/common';
 import { CreateSessionDto } from './dto/create-session.dto';
@@ -19,15 +20,23 @@ export class SessionService {
     private repository: Repository<Session>,
     @Inject(MovieService)
     private movieService: MovieService,
+    private readonly logger: Logger,
   ) {}
 
   async create(dto: CreateSessionDto) {
     const session = this.repository.create(dto);
 
     if (session.start >= session.end) {
-      throw new BadRequestException(
+      const invalidSessionDateException = new BadRequestException(
         'Session start should be earlier than session end!',
       );
+
+      this.logger.error(
+        'Invalid session start and end dates',
+        invalidSessionDateException.stack,
+      );
+
+      throw invalidSessionDateException;
     }
 
     session.movie = await this.movieService.findOne(dto.movieId);
@@ -63,7 +72,11 @@ export class SessionService {
     const session = await this.repository.findOneBy({ id });
 
     if (!session) {
-      throw new NotFoundException('Session not found');
+      const notFoundException = new NotFoundException('Session not found');
+
+      this.logger.error('Unable to find session', notFoundException.stack);
+
+      throw notFoundException;
     }
 
     return session;
@@ -73,7 +86,11 @@ export class SessionService {
     const session = await this.repository.findOneBy({ id });
 
     if (!session) {
-      throw new NotFoundException('Session not found');
+      const notFoundException = new NotFoundException('Session not found');
+
+      this.logger.error('Unable to find session', notFoundException.stack);
+
+      throw notFoundException;
     }
 
     const updateSession = this.repository.create(dto);
@@ -83,9 +100,16 @@ export class SessionService {
       (dto.start && !dto.end && updateSession.start >= session.end) ||
       (dto.end && !dto.start && session.start >= updateSession.end)
     ) {
-      throw new BadRequestException(
+      const invalidSessionDateException = new BadRequestException(
         'Session start should be earlier than session end!',
       );
+
+      this.logger.error(
+        'Invalid session start and end dates',
+        invalidSessionDateException.stack,
+      );
+
+      throw invalidSessionDateException;
     }
 
     if (dto.movieId) {
@@ -106,11 +130,24 @@ export class SessionService {
     });
 
     if (!session) {
-      throw new NotFoundException('Session not found');
+      const notFoundException = new NotFoundException('Session not found');
+
+      this.logger.error('Unable to find session', notFoundException.stack);
+
+      throw notFoundException;
     }
 
     if (session.seats.find((seat) => seat.ticket !== null)) {
-      throw new ConflictException('Seat with ticket cannot be deleted!');
+      const conflictException = new ConflictException(
+        'Session with seats with ticket cannot be deleted!',
+      );
+
+      this.logger.error(
+        'Unable to delete session with seats with not-null ticket',
+        conflictException.stack,
+      );
+
+      throw conflictException;
     }
 
     return this.repository.delete(id);

@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Logger, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ReviewModule } from './review/review.module';
 import { Review } from './review/entities/review.entity';
@@ -57,5 +57,6 @@ import { Seat } from './seat/entities/seat.entity';
     TicketModule,
     SeatModule,
   ],
+  providers: [Logger],
 })
 export class AppModule {}

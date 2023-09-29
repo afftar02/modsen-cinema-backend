@@ -1,4 +1,4 @@
-import { Inject, Injectable, NotFoundException } from '@nestjs/common';
+import { Inject, Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { CreateReviewDto } from './dto/create-review.dto';
 import { UpdateReviewDto } from './dto/update-review.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -13,6 +13,7 @@ export class ReviewService {
     private repository: Repository<Review>,
     @Inject(MovieService)
     private movieService: MovieService,
+    private readonly logger: Logger,
   ) {}
 
   async create(dto: CreateReviewDto) {
@@ -50,7 +51,11 @@ export class ReviewService {
     });
 
     if (!review) {
-      throw new NotFoundException('Review not found');
+      const notFoundException = new NotFoundException('Review not found');
+
+      this.logger.error('Unable to find review', notFoundException.stack);
+
+      throw notFoundException;
     }
 
     return review;
@@ -60,7 +65,11 @@ export class ReviewService {
     const review = await this.repository.findOneBy({ id });
 
     if (!review) {
-      throw new NotFoundException('Review not found');
+      const notFoundException = new NotFoundException('Review not found');
+
+      this.logger.error('Unable to find review', notFoundException.stack);
+
+      throw notFoundException;
     }
 
     const updateReview = this.repository.create(dto);
@@ -76,7 +85,11 @@ export class ReviewService {
     const review = await this.repository.findOneBy({ id });
 
     if (!review) {
-      throw new NotFoundException('Review not found');
+      const notFoundException = new NotFoundException('Review not found');
+
+      this.logger.error('Unable to find review', notFoundException.stack);
+
+      throw notFoundException;
     }
 
     return this.repository.delete(id);

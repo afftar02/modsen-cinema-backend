@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { CreateGenreDto } from './dto/create-genre.dto';
 import { UpdateGenreDto } from './dto/update-genre.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -10,6 +10,7 @@ export class GenreService {
   constructor(
     @InjectRepository(Genre)
     private repository: Repository<Genre>,
+    private readonly logger: Logger,
   ) {}
 
   create(dto: CreateGenreDto) {
@@ -33,7 +34,11 @@ export class GenreService {
     });
 
     if (!genre) {
-      throw new NotFoundException('Genre not found');
+      const notFoundException = new NotFoundException('Genre not found');
+
+      this.logger.error('Unable to find genre', notFoundException.stack);
+
+      throw notFoundException;
     }
 
     return genre;
@@ -43,7 +48,11 @@ export class GenreService {
     const genre = await this.repository.findOneBy({ id });
 
     if (!genre) {
-      throw new NotFoundException('Genre not found');
+      const notFoundException = new NotFoundException('Genre not found');
+
+      this.logger.error('Unable to find genre', notFoundException.stack);
+
+      throw notFoundException;
     }
 
     return this.repository.update(id, dto);
@@ -56,7 +65,11 @@ export class GenreService {
     });
 
     if (!genre) {
-      throw new NotFoundException('Genre not found');
+      const notFoundException = new NotFoundException('Genre not found');
+
+      this.logger.error('Unable to find genre', notFoundException.stack);
+
+      throw notFoundException;
     }
 
     genre.movies = [];

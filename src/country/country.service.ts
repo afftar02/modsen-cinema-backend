@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { CreateCountryDto } from './dto/create-country.dto';
 import { UpdateCountryDto } from './dto/update-country.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -10,6 +10,7 @@ export class CountryService {
   constructor(
     @InjectRepository(Country)
     private repository: Repository<Country>,
+    private readonly logger: Logger,
   ) {}
 
   create(dto: CreateCountryDto) {
@@ -27,7 +28,11 @@ export class CountryService {
     });
 
     if (!country) {
-      throw new NotFoundException('Country not found');
+      const notFoundException = new NotFoundException('Country not found');
+
+      this.logger.error('Unable to find country', notFoundException.stack);
+
+      throw notFoundException;
     }
 
     return country;
@@ -37,7 +42,11 @@ export class CountryService {
     const country = await this.repository.findOneBy({ id });
 
     if (!country) {
-      throw new NotFoundException('Country not found');
+      const notFoundException = new NotFoundException('Country not found');
+
+      this.logger.error('Unable to find country', notFoundException.stack);
+
+      throw notFoundException;
     }
 
     return this.repository.update(id, dto);
@@ -47,7 +56,11 @@ export class CountryService {
     const country = await this.repository.findOneBy({ id });
 
     if (!country) {
-      throw new NotFoundException('Country not found');
+      const notFoundException = new NotFoundException('Country not found');
+
+      this.logger.error('Unable to find country', notFoundException.stack);
+
+      throw notFoundException;
     }
 
     return this.repository.delete(id);

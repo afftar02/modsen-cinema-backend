@@ -1,4 +1,4 @@
-import { Inject, Injectable, NotFoundException } from '@nestjs/common';
+import { Inject, Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { CreateMovieDto } from './dto/create-movie.dto';
 import { UpdateMovieDto } from './dto/update-movie.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -25,6 +25,7 @@ export class MovieService {
     private posterService: PosterService,
     @Inject(TrailerService)
     private trailerService: TrailerService,
+    private readonly logger: Logger,
   ) {}
 
   async bindRelations(movie: Movie, dto: CreateMovieDto | UpdateMovieDto) {
@@ -76,7 +77,11 @@ export class MovieService {
     });
 
     if (!movie) {
-      throw new NotFoundException('Movie not found');
+      const notFoundException = new NotFoundException('Movie not found');
+
+      this.logger.error('Unable to find movie', notFoundException.stack);
+
+      throw notFoundException;
     }
 
     return movie;
@@ -92,7 +97,11 @@ export class MovieService {
     });
 
     if (!movie) {
-      throw new NotFoundException('Movie not found');
+      const notFoundException = new NotFoundException('Movie not found');
+
+      this.logger.error('Unable to find movie', notFoundException.stack);
+
+      throw notFoundException;
     }
 
     const updateMovie = {
@@ -122,7 +131,11 @@ export class MovieService {
     });
 
     if (!movie) {
-      throw new NotFoundException('Movie not found');
+      const notFoundException = new NotFoundException('Movie not found');
+
+      this.logger.error('Unable to find movie', notFoundException.stack);
+
+      throw notFoundException;
     }
 
     if (movie.poster) {
