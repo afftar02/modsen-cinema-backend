@@ -16,22 +16,19 @@ export class ReviewService {
     private readonly logger: Logger,
   ) {}
 
-  async create(dto: CreateReviewDto) {
+  async create(movieId: number, dto: CreateReviewDto) {
     const review = this.repository.create(dto);
 
-    review.movie = await this.movieService.findOne(dto.movieId);
+    review.movie = await this.movieService.findOne(movieId);
 
     return this.repository.save(review);
   }
 
-  findAll() {
+  findByMovieId(movieId: number) {
     return this.repository.find({
-      relations: {
-        movie: true,
-      },
-      select: {
+      where: {
         movie: {
-          id: true,
+          id: movieId,
         },
       },
     });
@@ -72,13 +69,7 @@ export class ReviewService {
       throw notFoundException;
     }
 
-    const updateReview = this.repository.create(dto);
-
-    if (dto.movieId) {
-      updateReview.movie = await this.movieService.findOne(dto.movieId);
-    }
-
-    return this.repository.update(id, updateReview);
+    return this.repository.update(id, dto);
   }
 
   async remove(id: number) {

@@ -20,8 +20,4 @@ export class CreateSessionDto {
   @ApiProperty()
   @IsNotEmpty({ message: 'Session format cannot be empty' })
   format: string;
-
-  @ApiProperty()
-  @IsNotEmpty({ message: 'Movie id cannot be empty' })
-  movieId: number;
 }
