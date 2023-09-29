@@ -17,14 +17,14 @@ import { ApiTags } from '@nestjs/swagger';
 export class ReviewController {
   constructor(private readonly reviewService: ReviewService) {}
 
-  @Post('review')
-  create(@Body() dto: CreateReviewDto) {
-    return this.reviewService.create(dto);
+  @Post(':movieId/review')
+  create(@Param('movieId') movieId: string, @Body() dto: CreateReviewDto) {
+    return this.reviewService.create(+movieId, dto);
   }
 
-  @Get('reviews')
-  findAll() {
-    return this.reviewService.findAll();
+  @Get(':movieId/reviews')
+  findByMovieId(@Param('movieId') movieId: string) {
+    return this.reviewService.findByMovieId(+movieId);
   }
 
   @Get('review/:id')

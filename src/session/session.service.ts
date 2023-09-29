@@ -23,7 +23,7 @@ export class SessionService {
     private readonly logger: Logger,
   ) {}
 
-  async create(dto: CreateSessionDto) {
+  async create(movieId: number, dto: CreateSessionDto) {
     const session = this.repository.create(dto);
 
     if (session.start >= session.end) {
@@ -39,7 +39,7 @@ export class SessionService {
       throw invalidSessionDateException;
     }
 
-    session.movie = await this.movieService.findOne(dto.movieId);
+    session.movie = await this.movieService.findOne(movieId);
 
     return this.repository.save(session);
   }
@@ -110,10 +110,6 @@ export class SessionService {
       );
 
       throw invalidSessionDateException;
-    }
-
-    if (dto.movieId) {
-      updateSession.movie = await this.movieService.findOne(dto.movieId);
     }
 
     return this.repository.update(id, updateSession);

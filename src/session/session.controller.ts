@@ -18,9 +18,9 @@ import { ApiQuery, ApiTags } from '@nestjs/swagger';
 export class SessionController {
   constructor(private readonly sessionService: SessionService) {}
 
-  @Post('session')
-  create(@Body() dto: CreateSessionDto) {
-    return this.sessionService.create(dto);
+  @Post(':movieId/session')
+  create(@Param('movieId') movieId: string, @Body() dto: CreateSessionDto) {
+    return this.sessionService.create(+movieId, dto);
   }
 
   @Get(':movieId/sessions')
