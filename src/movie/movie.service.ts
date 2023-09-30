@@ -147,4 +147,23 @@ export class MovieService {
 
     return this.repository.delete(id);
   }
+
+  async updateMovieRating(movieId: number) {
+    const movie = await this.repository.findOne({
+      where: { id: movieId },
+      relations: {
+        reviews: true,
+      },
+    });
+
+    const averageRating =
+      movie.reviews.reduce(
+        (ratingSum, currentReview) => ratingSum + currentReview.rating,
+        0,
+      ) / movie.reviews.length;
+
+    movie.rating = Number(averageRating.toFixed(1));
+
+    return this.repository.save(movie);
+  }
 }
