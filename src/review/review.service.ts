@@ -21,7 +21,11 @@ export class ReviewService {
 
     review.movie = await this.movieService.findOne(movieId);
 
-    return this.repository.save(review);
+    const savedReview = await this.repository.save(review);
+
+    await this.movieService.updateMovieRating(movieId);
+
+    return savedReview;
   }
 
   findByMovieId(movieId: number) {
@@ -59,7 +63,17 @@ export class ReviewService {
   }
 
   async update(id: number, dto: UpdateReviewDto) {
-    const review = await this.repository.findOneBy({ id });
+    const review = await this.repository.findOne({
+      where: { id },
+      relations: {
+        movie: true,
+      },
+      select: {
+        movie: {
+          id: true,
+        },
+      },
+    });
 
     if (!review) {
       const notFoundException = new NotFoundException('Review not found');
@@ -69,11 +83,27 @@ export class ReviewService {
       throw notFoundException;
     }
 
-    return this.repository.update(id, dto);
+    const updatedReview = await this.repository.update(id, dto);
+
+    if (dto.rating) {
+      await this.movieService.updateMovieRating(review.movie.id);
+    }
+
+    return updatedReview;
   }
 
   async remove(id: number) {
-    const review = await this.repository.findOneBy({ id });
+    const review = await this.repository.findOne({
+      where: { id },
+      relations: {
+        movie: true,
+      },
+      select: {
+        movie: {
+          id: true,
+        },
+      },
+    });
 
     if (!review) {
       const notFoundException = new NotFoundException('Review not found');
@@ -83,6 +113,10 @@ export class ReviewService {
       throw notFoundException;
     }
 
-    return this.repository.delete(id);
+    const deletedReview = await this.repository.delete(id);
+
+    await this.movieService.updateMovieRating(review.movie.id);
+
+    return deletedReview;
   }
 }

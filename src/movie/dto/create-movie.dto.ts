@@ -21,15 +21,6 @@ export class CreateMovieDto {
 
   @ApiProperty({
     minimum: 0,
-    maximum: 10,
-  })
-  @IsOptional()
-  @Min(0, { message: 'Rating must be equal or greater than 0' })
-  @Max(10, { message: 'Rating must be equal or less than 10' })
-  rating: number;
-
-  @ApiProperty({
-    minimum: 0,
     maximum: 18,
   })
   @IsNotEmpty({ message: 'Please, add age restriction' })
