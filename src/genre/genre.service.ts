@@ -45,37 +45,14 @@ export class GenreService {
   }
 
   async update(id: number, dto: UpdateGenreDto) {
-    const genre = await this.repository.findOneBy({ id });
-
-    if (!genre) {
-      const notFoundException = new NotFoundException('Genre not found');
-
-      this.logger.error('Unable to find genre', notFoundException.stack);
-
-      throw notFoundException;
-    }
+    await this.findOne(id);
 
     return this.repository.update(id, dto);
   }
 
   async remove(id: number) {
-    const genre = await this.repository.findOne({
-      where: { id },
-      relations: { movies: true },
-    });
+    const genre = await this.findOne(id);
 
-    if (!genre) {
-      const notFoundException = new NotFoundException('Genre not found');
-
-      this.logger.error('Unable to find genre', notFoundException.stack);
-
-      throw notFoundException;
-    }
-
-    genre.movies = [];
-
-    await this.repository.save(genre);
-
-    return this.repository.delete(id);
+    return this.repository.remove(genre);
   }
 }

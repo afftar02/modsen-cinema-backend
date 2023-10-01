@@ -2,7 +2,7 @@ import { Inject, Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { CreateMovieDto } from './dto/create-movie.dto';
 import { UpdateMovieDto } from './dto/update-movie.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { QueryRunner, Repository } from 'typeorm';
 import { Movie } from './entities/movie.entity';
 import { CountryService } from '../country/country.service';
 import { ActorService } from '../actor/actor.service';
@@ -88,21 +88,7 @@ export class MovieService {
   }
 
   async update(id: number, dto: UpdateMovieDto) {
-    const movie = await this.repository.findOne({
-      where: { id },
-      relations: {
-        poster: true,
-        trailer: true,
-      },
-    });
-
-    if (!movie) {
-      const notFoundException = new NotFoundException('Movie not found');
-
-      this.logger.error('Unable to find movie', notFoundException.stack);
-
-      throw notFoundException;
-    }
+    const movie = await this.findOne(id);
 
     const updateMovie = {
       ...movie,
@@ -111,10 +97,10 @@ export class MovieService {
 
     await this.bindRelations(updateMovie, dto);
 
-    if (dto.posterId) {
+    if (dto.posterId && movie.poster) {
       await this.posterService.remove(movie.poster.id);
     }
-    if (dto.trailerId) {
+    if (dto.trailerId && movie.trailer) {
       await this.trailerService.remove(movie.trailer.id);
     }
 
@@ -122,21 +108,7 @@ export class MovieService {
   }
 
   async remove(id: number) {
-    const movie = await this.repository.findOne({
-      where: { id },
-      relations: {
-        poster: true,
-        trailer: true,
-      },
-    });
-
-    if (!movie) {
-      const notFoundException = new NotFoundException('Movie not found');
-
-      this.logger.error('Unable to find movie', notFoundException.stack);
-
-      throw notFoundException;
-    }
+    const movie = await this.findOne(id);
 
     if (movie.poster) {
       await this.posterService.remove(movie.poster.id);
@@ -148,8 +120,8 @@ export class MovieService {
     return this.repository.delete(id);
   }
 
-  async updateMovieRating(movieId: number) {
-    const movie = await this.repository.findOne({
+  async updateMovieRating(movieId: number, queryRunner: QueryRunner) {
+    const movie = await queryRunner.manager.findOne(Movie, {
       where: { id: movieId },
       relations: {
         reviews: true,
@@ -164,6 +136,6 @@ export class MovieService {
 
     movie.rating = Number(averageRating.toFixed(1));
 
-    return this.repository.save(movie);
+    return queryRunner.manager.save(movie);
   }
 }

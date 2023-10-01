@@ -7,7 +7,6 @@ import {
 } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import * as express from 'express';
-import { join } from 'path';
 import { WinstonModule } from 'nest-winston';
 import { instance } from '../logger/winston.logger';
 
@@ -33,7 +32,7 @@ async function bootstrap() {
       },
     }),
   );
-  app.use('/uploads', express.static(join(__dirname, '..', 'uploads')));
+  app.use('/uploads', express.static('uploads'));
 
   const config = new DocumentBuilder()
     .setTitle('Cinema-modsen')

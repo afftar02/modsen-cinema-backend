@@ -45,37 +45,14 @@ export class ActorService {
   }
 
   async update(id: number, dto: UpdateActorDto) {
-    const actor = await this.repository.findOneBy({ id });
-
-    if (!actor) {
-      const notFoundException = new NotFoundException('Actor not found');
-
-      this.logger.error('Unable to find actor', notFoundException.stack);
-
-      throw notFoundException;
-    }
+    await this.findOne(id);
 
     return this.repository.update(id, dto);
   }
 
   async remove(id: number) {
-    const actor = await this.repository.findOne({
-      where: { id },
-      relations: { movies: true },
-    });
+    const actor = await this.findOne(id);
 
-    if (!actor) {
-      const notFoundException = new NotFoundException('Actor not found');
-
-      this.logger.error('Unable to find actor', notFoundException.stack);
-
-      throw notFoundException;
-    }
-
-    actor.movies = [];
-
-    await this.repository.save(actor);
-
-    return this.repository.delete(id);
+    return this.repository.remove(actor);
   }
 }

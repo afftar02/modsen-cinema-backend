@@ -83,16 +83,7 @@ export class SessionService {
   }
 
   async update(id: number, dto: UpdateSessionDto) {
-    const session = await this.repository.findOneBy({ id });
-
-    if (!session) {
-      const notFoundException = new NotFoundException('Session not found');
-
-      this.logger.error('Unable to find session', notFoundException.stack);
-
-      throw notFoundException;
-    }
-
+    const session = await this.findOne(id);
     const updateSession = this.repository.create(dto);
 
     if (

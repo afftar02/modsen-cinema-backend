@@ -48,15 +48,7 @@ export class TicketService {
   }
 
   async update(id: number, dto: UpdateTicketDto) {
-    const ticket = await this.repository.findOneBy({ id });
-
-    if (!ticket) {
-      const notFoundException = new NotFoundException('Ticket not found');
-
-      this.logger.error('Unable to find ticket', notFoundException.stack);
-
-      throw notFoundException;
-    }
+    const ticket = await this.findOne(id);
 
     const updateTicket = {
       ...ticket,
@@ -71,17 +63,7 @@ export class TicketService {
   }
 
   async remove(id: number) {
-    const ticket = await this.repository.findOne({
-      where: { id },
-    });
-
-    if (!ticket) {
-      const notFoundException = new NotFoundException('Ticket not found');
-
-      this.logger.error('Unable to find ticket', notFoundException.stack);
-
-      throw notFoundException;
-    }
+    await this.findOne(id);
 
     return this.repository.delete(id);
   }

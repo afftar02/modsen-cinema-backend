@@ -3,7 +3,7 @@ import { CreateReviewDto } from './dto/create-review.dto';
 import { UpdateReviewDto } from './dto/update-review.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Review } from './entities/review.entity';
-import { Repository } from 'typeorm';
+import { DataSource, Repository } from 'typeorm';
 import { MovieService } from '../movie/movie.service';
 
 @Injectable()
@@ -14,18 +14,32 @@ export class ReviewService {
     @Inject(MovieService)
     private movieService: MovieService,
     private readonly logger: Logger,
+    private dataSource: DataSource,
   ) {}
 
   async create(movieId: number, dto: CreateReviewDto) {
-    const review = this.repository.create(dto);
+    const queryRunner = this.dataSource.createQueryRunner();
 
-    review.movie = await this.movieService.findOne(movieId);
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+    try {
+      const review = this.repository.create(dto);
 
-    const savedReview = await this.repository.save(review);
+      review.movie = await this.movieService.findOne(movieId);
 
-    await this.movieService.updateMovieRating(movieId);
+      const savedReview = await queryRunner.manager.save(review);
 
-    return savedReview;
+      await this.movieService.updateMovieRating(movieId, queryRunner);
+
+      await queryRunner.commitTransaction();
+
+      return savedReview;
+    } catch (err) {
+      await queryRunner.rollbackTransaction();
+      this.logger.error('Unable to create review', err.stack);
+    } finally {
+      await queryRunner.release();
+    }
   }
 
   findByMovieId(movieId: number) {
@@ -63,60 +77,50 @@ export class ReviewService {
   }
 
   async update(id: number, dto: UpdateReviewDto) {
-    const review = await this.repository.findOne({
-      where: { id },
-      relations: {
-        movie: true,
-      },
-      select: {
-        movie: {
-          id: true,
-        },
-      },
-    });
+    const review = await this.findOne(id);
 
-    if (!review) {
-      const notFoundException = new NotFoundException('Review not found');
+    const queryRunner = this.dataSource.createQueryRunner();
 
-      this.logger.error('Unable to find review', notFoundException.stack);
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+    try {
+      const updateResult = await queryRunner.manager.update(Review, id, dto);
 
-      throw notFoundException;
+      if (dto.rating) {
+        await this.movieService.updateMovieRating(review.movie.id, queryRunner);
+      }
+
+      await queryRunner.commitTransaction();
+
+      return updateResult;
+    } catch (err) {
+      await queryRunner.rollbackTransaction();
+      this.logger.error('Unable to update review', err.stack);
+    } finally {
+      await queryRunner.release();
     }
-
-    const updatedReview = await this.repository.update(id, dto);
-
-    if (dto.rating) {
-      await this.movieService.updateMovieRating(review.movie.id);
-    }
-
-    return updatedReview;
   }
 
   async remove(id: number) {
-    const review = await this.repository.findOne({
-      where: { id },
-      relations: {
-        movie: true,
-      },
-      select: {
-        movie: {
-          id: true,
-        },
-      },
-    });
+    const review = await this.findOne(id);
 
-    if (!review) {
-      const notFoundException = new NotFoundException('Review not found');
+    const queryRunner = this.dataSource.createQueryRunner();
 
-      this.logger.error('Unable to find review', notFoundException.stack);
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+    try {
+      const deleteResult = await queryRunner.manager.delete(Review, id);
 
-      throw notFoundException;
+      await this.movieService.updateMovieRating(review.movie.id, queryRunner);
+
+      await queryRunner.commitTransaction();
+
+      return deleteResult;
+    } catch (err) {
+      await queryRunner.rollbackTransaction();
+      this.logger.error('Unable to delete review', err.stack);
+    } finally {
+      await queryRunner.release();
     }
-
-    const deletedReview = await this.repository.delete(id);
-
-    await this.movieService.updateMovieRating(review.movie.id);
-
-    return deletedReview;
   }
 }

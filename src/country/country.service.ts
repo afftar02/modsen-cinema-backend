@@ -39,29 +39,13 @@ export class CountryService {
   }
 
   async update(id: number, dto: UpdateCountryDto) {
-    const country = await this.repository.findOneBy({ id });
-
-    if (!country) {
-      const notFoundException = new NotFoundException('Country not found');
-
-      this.logger.error('Unable to find country', notFoundException.stack);
-
-      throw notFoundException;
-    }
+    await this.findOne(id);
 
     return this.repository.update(id, dto);
   }
 
   async remove(id: number) {
-    const country = await this.repository.findOneBy({ id });
-
-    if (!country) {
-      const notFoundException = new NotFoundException('Country not found');
-
-      this.logger.error('Unable to find country', notFoundException.stack);
-
-      throw notFoundException;
-    }
+    await this.findOne(id);
 
     return this.repository.delete(id);
   }
