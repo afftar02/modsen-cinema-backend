@@ -32,15 +32,7 @@ export class PosterService {
   }
 
   async remove(id: number) {
-    const poster = await this.repository.findOneBy({ id });
-
-    if (!poster) {
-      const notFoundException = new NotFoundException('Poster not found');
-
-      this.logger.error('Unable to find poster', notFoundException.stack);
-
-      throw notFoundException;
-    }
+    const poster = await this.findOne(id);
 
     fs.unlink(FILES_PATH + poster.filename, (err) => {
       if (err) {

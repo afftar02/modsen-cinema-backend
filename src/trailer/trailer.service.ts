@@ -32,15 +32,7 @@ export class TrailerService {
   }
 
   async remove(id: number) {
-    const trailer = await this.repository.findOneBy({ id });
-
-    if (!trailer) {
-      const notFoundException = new NotFoundException('Trailer not found');
-
-      this.logger.error('Unable to find trailer', notFoundException.stack);
-
-      throw notFoundException;
-    }
+    const trailer = await this.findOne(id);
 
     fs.unlink(FILES_PATH + trailer.filename, (err) => {
       if (err) {
