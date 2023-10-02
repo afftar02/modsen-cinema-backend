@@ -45,6 +45,8 @@ export class SessionService {
   }
 
   async findMovieSessions(movieId: number, date: Date) {
+    await this.movieService.findOne(movieId);
+
     let sessions = await this.repository
       .createQueryBuilder('session')
       .where('session.movieId = :movieId', { movieId: movieId })
