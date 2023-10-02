@@ -16,16 +16,25 @@ export class TicketService {
     private readonly logger: Logger,
   ) {}
 
-  async create(dto: CreateTicketDto) {
+  async create(personId: number, dto: CreateTicketDto) {
     const ticket = this.repository.create(dto);
 
     ticket.seats = await this.seatService.findByIds(dto.seatIds);
 
-    return this.repository.save(ticket);
+    return this.repository.save({
+      ...ticket,
+      person: { id: personId },
+    });
   }
 
-  findAll() {
-    return this.repository.find();
+  findByPersonId(personId: number) {
+    return this.repository.find({
+      where: {
+        person: {
+          id: personId,
+        },
+      },
+    });
   }
 
   async findOne(id: number) {
@@ -33,6 +42,7 @@ export class TicketService {
       where: { id },
       relations: {
         seats: true,
+        person: true,
       },
     });
 

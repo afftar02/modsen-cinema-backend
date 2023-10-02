@@ -17,14 +17,14 @@ import { ApiTags } from '@nestjs/swagger';
 export class TicketController {
   constructor(private readonly ticketService: TicketService) {}
 
-  @Post('ticket')
-  create(@Body() dto: CreateTicketDto) {
-    return this.ticketService.create(dto);
+  @Post(':personId/ticket')
+  create(@Param('personId') personId: string, @Body() dto: CreateTicketDto) {
+    return this.ticketService.create(+personId, dto);
   }
 
-  @Get('tickets')
-  findAll() {
-    return this.ticketService.findAll();
+  @Get(':personId/tickets')
+  findByPersonId(@Param('personId') personId: string) {
+    return this.ticketService.findByPersonId(+personId);
   }
 
   @Get('ticket/:id')
