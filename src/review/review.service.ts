@@ -18,15 +18,15 @@ export class ReviewService {
   ) {}
 
   async create(movieId: number, dto: CreateReviewDto) {
+    const review = this.repository.create(dto);
+
+    review.movie = await this.movieService.findOne(movieId);
+
     const queryRunner = this.dataSource.createQueryRunner();
 
     await queryRunner.connect();
     await queryRunner.startTransaction();
     try {
-      const review = this.repository.create(dto);
-
-      review.movie = await this.movieService.findOne(movieId);
-
       const savedReview = await queryRunner.manager.save(review);
 
       await this.movieService.updateMovieRating(movieId, queryRunner);
@@ -42,7 +42,9 @@ export class ReviewService {
     }
   }
 
-  findByMovieId(movieId: number) {
+  async findByMovieId(movieId: number) {
+    await this.movieService.findOne(movieId);
+
     return this.repository.find({
       where: {
         movie: {
