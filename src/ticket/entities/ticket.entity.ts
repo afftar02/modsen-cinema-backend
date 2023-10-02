@@ -1,5 +1,12 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { Seat } from '../../seat/entities/seat.entity';
+import { Person } from '../../person/entities/person.entity';
 
 @Entity('ticket')
 export class Ticket {
@@ -14,4 +21,10 @@ export class Ticket {
 
   @OneToMany(() => Seat, (seat) => seat.ticket)
   seats: Seat[];
+
+  @ManyToOne(() => Person, (person) => person.tickets, {
+    nullable: false,
+    onDelete: 'CASCADE',
+  })
+  person: Person;
 }

@@ -11,6 +11,7 @@ import { TrailerModule } from './trailer/trailer.module';
 import { SessionModule } from './session/session.module';
 import { TicketModule } from './ticket/ticket.module';
 import { SeatModule } from './seat/seat.module';
+import { PersonModule } from './person/person.module';
 
 @Module({
   imports: [
@@ -35,6 +36,7 @@ import { SeatModule } from './seat/seat.module';
     SessionModule,
     TicketModule,
     SeatModule,
+    PersonModule,
   ],
   providers: [Logger],
 })
