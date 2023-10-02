@@ -12,6 +12,7 @@ import { Repository } from 'typeorm';
 import { Session } from './entities/session.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { MovieService } from '../movie/movie.service';
+import { Movie } from '../movie/entities/movie.entity';
 
 @Injectable()
 export class SessionService {
@@ -22,6 +23,21 @@ export class SessionService {
     private movieService: MovieService,
     private readonly logger: Logger,
   ) {}
+
+  async validateWithMovieStart(movie: Movie, session: Session) {
+    if (session.start < movie.start) {
+      const invalidSessionDateException = new BadRequestException(
+        'Session date cannot be earlier than movie start date',
+      );
+
+      this.logger.error(
+        'Invalid session date',
+        invalidSessionDateException.stack,
+      );
+
+      throw invalidSessionDateException;
+    }
+  }
 
   async create(movieId: number, dto: CreateSessionDto) {
     const session = this.repository.create(dto);
@@ -39,7 +55,11 @@ export class SessionService {
       throw invalidSessionDateException;
     }
 
-    session.movie = await this.movieService.findOne(movieId);
+    const movie = await this.movieService.findOne(movieId);
+
+    await this.validateWithMovieStart(movie, session);
+
+    session.movie = movie;
 
     return this.repository.save(session);
   }
@@ -71,7 +91,17 @@ export class SessionService {
   }
 
   async findOne(id: number) {
-    const session = await this.repository.findOneBy({ id });
+    const session = await this.repository.findOne({
+      where: { id },
+      relations: {
+        movie: true,
+      },
+      select: {
+        movie: {
+          id: true,
+        },
+      },
+    });
 
     if (!session) {
       const notFoundException = new NotFoundException('Session not found');
@@ -103,6 +133,12 @@ export class SessionService {
       );
 
       throw invalidSessionDateException;
+    }
+
+    if (dto.start) {
+      const movie = await this.movieService.findOne(session.movie.id);
+
+      await this.validateWithMovieStart(movie, updateSession);
     }
 
     return this.repository.update(id, updateSession);
