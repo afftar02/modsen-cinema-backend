@@ -5,6 +5,7 @@ import { Repository } from 'typeorm';
 import { Ticket } from './entities/ticket.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { SeatService } from '../seat/seat.service';
+import { PersonService } from '../person/person.service';
 
 @Injectable()
 export class TicketService {
@@ -13,6 +14,8 @@ export class TicketService {
     private repository: Repository<Ticket>,
     @Inject(SeatService)
     private seatService: SeatService,
+    @Inject(PersonService)
+    private personService: PersonService,
     private readonly logger: Logger,
   ) {}
 
@@ -20,14 +23,14 @@ export class TicketService {
     const ticket = this.repository.create(dto);
 
     ticket.seats = await this.seatService.findByIds(dto.seatIds);
+    ticket.person = await this.personService.findOne(personId);
 
-    return this.repository.save({
-      ...ticket,
-      person: { id: personId },
-    });
+    return this.repository.save(ticket);
   }
 
-  findByPersonId(personId: number) {
+  async findByPersonId(personId: number) {
+    await this.personService.findOne(personId);
+
     return this.repository.find({
       where: {
         person: {
