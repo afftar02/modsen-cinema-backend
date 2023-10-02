@@ -1,5 +1,13 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  OneToMany,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { Ticket } from '../../ticket/entities/ticket.entity';
+import { Avatar } from '../../avatar/entities/avatar.entity';
 
 @Entity('person')
 export class Person {
@@ -23,4 +31,11 @@ export class Person {
 
   @OneToMany(() => Ticket, (ticket) => ticket.person)
   tickets: Ticket[];
+
+  @OneToOne(() => Avatar, {
+    nullable: true,
+    onDelete: 'SET NULL',
+  })
+  @JoinColumn()
+  avatar: Avatar;
 }

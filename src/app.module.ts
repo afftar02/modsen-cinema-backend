@@ -12,6 +12,7 @@ import { SessionModule } from './session/session.module';
 import { TicketModule } from './ticket/ticket.module';
 import { SeatModule } from './seat/seat.module';
 import { PersonModule } from './person/person.module';
+import { AvatarModule } from './avatar/avatar.module';
 
 @Module({
   imports: [
@@ -37,6 +38,7 @@ import { PersonModule } from './person/person.module';
     TicketModule,
     SeatModule,
     PersonModule,
+    AvatarModule,
   ],
   providers: [Logger],
 })
