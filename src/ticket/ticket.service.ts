@@ -1,4 +1,4 @@
-import { Inject, Injectable, Logger, NotFoundException } from '@nestjs/common';
+import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { CreateTicketDto } from './dto/create-ticket.dto';
 import { UpdateTicketDto } from './dto/update-ticket.dto';
 import { Repository } from 'typeorm';
@@ -12,12 +12,27 @@ export class TicketService {
   constructor(
     @InjectRepository(Ticket)
     private repository: Repository<Ticket>,
-    @Inject(SeatService)
     private seatService: SeatService,
-    @Inject(PersonService)
     private personService: PersonService,
     private readonly logger: Logger,
   ) {}
+
+  getInfoFromTicket(ticket: Ticket) {
+    const { seats, ...ticketInfo } = ticket;
+    const seatsInfo = seats.map((seat) => {
+      const { session, ...info } = seat;
+
+      return info;
+    });
+    const { movie, ...sessionInfo } = seats.at(0).session;
+
+    return {
+      ...ticketInfo,
+      seats: seatsInfo,
+      session: sessionInfo,
+      movie: movie,
+    };
+  }
 
   async create(personId: number, dto: CreateTicketDto) {
     const ticket = this.repository.create(dto);
@@ -31,20 +46,37 @@ export class TicketService {
   async findByPersonId(personId: number) {
     await this.personService.findOne(personId);
 
-    return this.repository.find({
+    const tickets = await this.repository.find({
       where: {
         person: {
           id: personId,
         },
       },
+      relations: {
+        seats: {
+          session: {
+            movie: {
+              poster: true,
+            },
+          },
+        },
+      },
     });
+
+    return tickets.map((ticket) => this.getInfoFromTicket(ticket));
   }
 
   async findOne(id: number) {
     const ticket = await this.repository.findOne({
       where: { id },
       relations: {
-        seats: true,
+        seats: {
+          session: {
+            movie: {
+              poster: true,
+            },
+          },
+        },
         person: true,
       },
     });
@@ -57,7 +89,7 @@ export class TicketService {
       throw notFoundException;
     }
 
-    return ticket;
+    return this.getInfoFromTicket(ticket);
   }
 
   async update(id: number, dto: UpdateTicketDto) {
