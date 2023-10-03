@@ -18,12 +18,12 @@ import { ApiQuery, ApiTags } from '@nestjs/swagger';
 export class SeatController {
   constructor(private readonly seatService: SeatService) {}
 
-  @Post(':sessionId/seat')
+  @Post('session/:sessionId/seat')
   create(@Param('sessionId') sessionId: string, @Body() dto: CreateSeatDto) {
     return this.seatService.create(+sessionId, dto);
   }
 
-  @Post(':sessionId/defaultSeats')
+  @Post('session/:sessionId/defaultSeats')
   @ApiQuery({ name: 'price' })
   generateDefault(
     @Param('sessionId') sessionId: string,
@@ -32,7 +32,7 @@ export class SeatController {
     return this.seatService.generateDefault(+sessionId, price);
   }
 
-  @Get(':sessionId/seats')
+  @Get('session/:sessionId/seats')
   findSessionSeats(@Param('sessionId') sessionId: string) {
     return this.seatService.findSessionSeats(+sessionId);
   }
