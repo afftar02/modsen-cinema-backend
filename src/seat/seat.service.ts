@@ -9,7 +9,7 @@ import { CreateSeatDto } from './dto/create-seat.dto';
 import { UpdateSeatDto } from './dto/update-seat.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Seat } from './entities/seat.entity';
-import { In, Repository } from 'typeorm';
+import { DataSource, In, QueryRunner, Repository } from 'typeorm';
 import { SessionService } from '../session/session.service';
 
 @Injectable()
@@ -18,6 +18,7 @@ export class SeatService {
     @InjectRepository(Seat)
     private repository: Repository<Seat>,
     private sessionService: SessionService,
+    private dataSource: DataSource,
     private readonly logger: Logger,
   ) {}
 
@@ -43,14 +44,62 @@ export class SeatService {
     });
   }
 
-  async create(sessionId: number, dto: CreateSeatDto) {
+  async create(
+    sessionId: number,
+    dto: CreateSeatDto,
+    queryRunner?: QueryRunner,
+  ) {
     await this.checkExistingSeat(sessionId, dto);
 
     const seat = this.repository.create(dto);
 
     seat.session = await this.sessionService.findOne(sessionId);
 
-    return this.repository.save(seat);
+    if (queryRunner) {
+      return queryRunner.manager.save(seat);
+    } else {
+      return this.repository.save(seat);
+    }
+  }
+
+  async generateDefault(sessionId: number, price: number) {
+    const queryRunner = this.dataSource.createQueryRunner();
+
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+    try {
+      const seats = [];
+      const rowsNumber = 9;
+
+      for (let i = 0; i < rowsNumber; i++) {
+        const rowWidth = i === 0 || i === rowsNumber - 1 ? 6 : 8;
+
+        for (let j = 0; j < rowWidth; j++) {
+          const seat = new CreateSeatDto();
+
+          seat.row = i + 1;
+          seat.number = j + 1;
+          seat.price = price;
+
+          const { session, ...createdSeat } = await this.create(
+            sessionId,
+            seat,
+            queryRunner,
+          );
+          seats.push(createdSeat);
+        }
+      }
+
+      await queryRunner.commitTransaction();
+
+      return seats;
+    } catch (err) {
+      await queryRunner.rollbackTransaction();
+      this.logger.error('Unable to generate seats', err.stack);
+      throw new BadRequestException('Unable to generate default seats');
+    } finally {
+      await queryRunner.release();
+    }
   }
 
   async findSessionSeats(sessionId: number) {
