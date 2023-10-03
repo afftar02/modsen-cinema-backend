@@ -1,7 +1,6 @@
 import {
   BadRequestException,
   ConflictException,
-  Inject,
   Injectable,
   Logger,
   NotFoundException,
@@ -18,7 +17,6 @@ export class SeatService {
   constructor(
     @InjectRepository(Seat)
     private repository: Repository<Seat>,
-    @Inject(SessionService)
     private sessionService: SessionService,
     private readonly logger: Logger,
   ) {}

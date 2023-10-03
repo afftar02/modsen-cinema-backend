@@ -1,4 +1,4 @@
-import { Inject, Injectable, Logger, NotFoundException } from '@nestjs/common';
+import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { CreateReviewDto } from './dto/create-review.dto';
 import { UpdateReviewDto } from './dto/update-review.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -11,7 +11,6 @@ export class ReviewService {
   constructor(
     @InjectRepository(Review)
     private repository: Repository<Review>,
-    @Inject(MovieService)
     private movieService: MovieService,
     private readonly logger: Logger,
     private dataSource: DataSource,

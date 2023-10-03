@@ -1,7 +1,6 @@
 import {
   BadRequestException,
   ConflictException,
-  Inject,
   Injectable,
   Logger,
   NotFoundException,
@@ -19,7 +18,6 @@ export class SessionService {
   constructor(
     @InjectRepository(Session)
     private repository: Repository<Session>,
-    @Inject(MovieService)
     private movieService: MovieService,
     private readonly logger: Logger,
   ) {}

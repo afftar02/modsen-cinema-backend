@@ -1,4 +1,4 @@
-import { Inject, Injectable, Logger, NotFoundException } from '@nestjs/common';
+import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { CreateMovieDto } from './dto/create-movie.dto';
 import { UpdateMovieDto } from './dto/update-movie.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -15,15 +15,10 @@ export class MovieService {
   constructor(
     @InjectRepository(Movie)
     private repository: Repository<Movie>,
-    @Inject(CountryService)
     private countryService: CountryService,
-    @Inject(ActorService)
     private actorService: ActorService,
-    @Inject(GenreService)
     private genreService: GenreService,
-    @Inject(PosterService)
     private posterService: PosterService,
-    @Inject(TrailerService)
     private trailerService: TrailerService,
     private readonly logger: Logger,
   ) {}
