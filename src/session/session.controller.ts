@@ -18,12 +18,12 @@ import { ApiQuery, ApiTags } from '@nestjs/swagger';
 export class SessionController {
   constructor(private readonly sessionService: SessionService) {}
 
-  @Post(':movieId/session')
+  @Post('movie/:movieId/session')
   create(@Param('movieId') movieId: string, @Body() dto: CreateSessionDto) {
     return this.sessionService.create(+movieId, dto);
   }
 
-  @Get(':movieId/sessions')
+  @Get('movie/:movieId/sessions')
   @ApiQuery({ name: 'date', required: false })
   findMovieSessions(
     @Param('movieId') movieId: string,
