@@ -1,4 +1,4 @@
-import { Inject, Injectable, Logger, NotFoundException } from '@nestjs/common';
+import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { CreatePersonDto } from './dto/create-person.dto';
 import { UpdatePersonDto } from './dto/update-person.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -11,7 +11,6 @@ export class PersonService {
   constructor(
     @InjectRepository(Person)
     private repository: Repository<Person>,
-    @Inject(AvatarService)
     private avatarService: AvatarService,
     private readonly logger: Logger,
   ) {}
