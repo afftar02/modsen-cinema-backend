@@ -1,10 +1,16 @@
-import { Injectable, Logger, NotFoundException } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  Logger,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreatePersonDto } from './dto/create-person.dto';
 import { UpdatePersonDto } from './dto/update-person.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Person } from './entities/person.entity';
 import { Repository } from 'typeorm';
 import { AvatarService } from '../avatar/avatar.service';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class PersonService {
@@ -16,11 +22,25 @@ export class PersonService {
   ) {}
 
   async create(dto: CreatePersonDto) {
+    const personWithEmail = await this.findByEmail(dto.email);
+
+    if (personWithEmail) {
+      const conflictException = new ConflictException(
+        'Person with this email is already exists',
+      );
+
+      this.logger.error('Unable to create person', conflictException.stack);
+
+      throw conflictException;
+    }
+
     const person = this.repository.create(dto);
 
     if (dto.avatarId) {
       person.avatar = await this.avatarService.findOne(dto.avatarId);
     }
+
+    person.password = await this.getPasswordHash(person.password);
 
     return this.repository.save(person);
   }
@@ -44,6 +64,10 @@ export class PersonService {
     return person;
   }
 
+  findByEmail(email: string) {
+    return this.repository.findOneBy({ email });
+  }
+
   async update(id: number, dto: UpdatePersonDto) {
     const person = await this.findOne(id);
 
@@ -57,7 +81,11 @@ export class PersonService {
     }
 
     if (dto.avatarId && person.avatar) {
-      await this.avatarService.remove(person.avatar.id);
+      await this.avatarService.remove(person.id, person.avatar.id);
+    }
+
+    if (dto.password) {
+      updatePerson.password = await this.getPasswordHash(dto.password);
     }
 
     return this.repository.save(updatePerson);
@@ -67,9 +95,15 @@ export class PersonService {
     const person = await this.findOne(id);
 
     if (person.avatar) {
-      await this.avatarService.remove(person.avatar.id);
+      await this.avatarService.remove(person.id, person.avatar.id);
     }
 
     return this.repository.delete(id);
+  }
+
+  async getPasswordHash(value: string) {
+    const salt = await bcrypt.genSalt(10);
+
+    return await bcrypt.hash(value, salt);
   }
 }

@@ -6,39 +6,48 @@ import {
   Patch,
   Param,
   Delete,
+  UseGuards,
 } from '@nestjs/common';
 import { TicketService } from './ticket.service';
 import { CreateTicketDto } from './dto/create-ticket.dto';
 import { UpdateTicketDto } from './dto/update-ticket.dto';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { UserId } from '../decorators/user-id.decorator';
 
 @Controller()
 @ApiTags('Ticket')
+@UseGuards(JwtAuthGuard)
+@ApiBearerAuth()
 export class TicketController {
   constructor(private readonly ticketService: TicketService) {}
 
-  @Post('person/:personId/ticket')
-  create(@Param('personId') personId: string, @Body() dto: CreateTicketDto) {
-    return this.ticketService.create(+personId, dto);
+  @Post('ticket')
+  create(@UserId() userId: number, @Body() dto: CreateTicketDto) {
+    return this.ticketService.create(userId, dto);
   }
 
-  @Get('person/:personId/tickets')
-  findByPersonId(@Param('personId') personId: string) {
-    return this.ticketService.findByPersonId(+personId);
+  @Get('tickets')
+  findByPersonId(@UserId() userId: number) {
+    return this.ticketService.findByPersonId(userId);
   }
 
   @Get('ticket/:id')
-  findOne(@Param('id') id: string) {
-    return this.ticketService.findOne(+id);
+  findOne(@UserId() userId: number, @Param('id') id: string) {
+    return this.ticketService.findOne(userId, +id);
   }
 
   @Patch('ticket/:id')
-  update(@Param('id') id: string, @Body() updateTicketDto: UpdateTicketDto) {
-    return this.ticketService.update(+id, updateTicketDto);
+  update(
+    @UserId() userId: number,
+    @Param('id') id: string,
+    @Body() updateTicketDto: UpdateTicketDto,
+  ) {
+    return this.ticketService.update(userId, +id, updateTicketDto);
   }
 
   @Delete('ticket/:id')
-  remove(@Param('id') id: string) {
-    return this.ticketService.remove(+id);
+  remove(@UserId() userId: number, @Param('id') id: string) {
+    return this.ticketService.remove(userId, +id);
   }
 }
