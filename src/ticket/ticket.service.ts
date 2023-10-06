@@ -1,11 +1,15 @@
-import { Injectable, Logger, NotFoundException } from '@nestjs/common';
+import {
+  ForbiddenException,
+  Injectable,
+  Logger,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateTicketDto } from './dto/create-ticket.dto';
 import { UpdateTicketDto } from './dto/update-ticket.dto';
 import { Repository } from 'typeorm';
 import { Ticket } from './entities/ticket.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { SeatService } from '../seat/seat.service';
-import { PersonService } from '../person/person.service';
 
 @Injectable()
 export class TicketService {
@@ -13,12 +17,11 @@ export class TicketService {
     @InjectRepository(Ticket)
     private repository: Repository<Ticket>,
     private seatService: SeatService,
-    private personService: PersonService,
     private readonly logger: Logger,
   ) {}
 
   getInfoFromTicket(ticket: Ticket) {
-    const { seats, ...ticketInfo } = ticket;
+    const { seats, person, ...ticketInfo } = ticket;
     const seatsInfo = seats.map((seat) => {
       const { session, ...info } = seat;
 
@@ -38,14 +41,16 @@ export class TicketService {
     const ticket = this.repository.create(dto);
 
     ticket.seats = await this.seatService.findByIds(dto.seatIds);
-    ticket.person = await this.personService.findOne(personId);
 
-    return this.repository.save(ticket);
+    return this.repository.save({
+      ...ticket,
+      person: {
+        id: personId,
+      },
+    });
   }
 
   async findByPersonId(personId: number) {
-    await this.personService.findOne(personId);
-
     const tickets = await this.repository.find({
       where: {
         person: {
@@ -66,7 +71,7 @@ export class TicketService {
     return tickets.map((ticket) => this.getInfoFromTicket(ticket));
   }
 
-  async findOne(id: number) {
+  async findOne(personId: number, id: number) {
     const ticket = await this.repository.findOne({
       where: { id },
       relations: {
@@ -89,11 +94,19 @@ export class TicketService {
       throw notFoundException;
     }
 
+    if (ticket.person.id !== personId) {
+      const forbiddenException = new ForbiddenException('No access');
+
+      this.logger.error('No access', forbiddenException.stack);
+
+      throw forbiddenException;
+    }
+
     return this.getInfoFromTicket(ticket);
   }
 
-  async update(id: number, dto: UpdateTicketDto) {
-    const ticket = await this.findOne(id);
+  async update(personId: number, id: number, dto: UpdateTicketDto) {
+    const ticket = await this.findOne(personId, id);
 
     const updateTicket = {
       ...ticket,
@@ -107,8 +120,8 @@ export class TicketService {
     return this.repository.save(updateTicket);
   }
 
-  async remove(id: number) {
-    await this.findOne(id);
+  async remove(personId: number, id: number) {
+    await this.findOne(personId, id);
 
     return this.repository.delete(id);
   }

@@ -1,39 +1,46 @@
 import {
   Controller,
   Get,
-  Post,
   Body,
   Patch,
-  Param,
   Delete,
+  UseGuards,
 } from '@nestjs/common';
 import { PersonService } from './person.service';
-import { CreatePersonDto } from './dto/create-person.dto';
 import { UpdatePersonDto } from './dto/update-person.dto';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { UserId } from '../decorators/user-id.decorator';
 
 @Controller('person')
 @ApiTags('Person')
+@UseGuards(JwtAuthGuard)
+@ApiBearerAuth()
 export class PersonController {
   constructor(private readonly personService: PersonService) {}
 
-  @Post()
-  create(@Body() dto: CreatePersonDto) {
-    return this.personService.create(dto);
+  @Get()
+  async findOne(@UserId() userId: number) {
+    const { password, ...person } = await this.personService.findOne(userId);
+
+    return person;
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.personService.findOne(+id);
+  @Patch()
+  async update(
+    @UserId() userId: number,
+    @Body() updatePersonDto: UpdatePersonDto,
+  ) {
+    const { password, ...person } = await this.personService.update(
+      userId,
+      updatePersonDto,
+    );
+
+    return person;
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updatePersonDto: UpdatePersonDto) {
-    return this.personService.update(+id, updatePersonDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.personService.remove(+id);
+  @Delete()
+  remove(@UserId() userId: number) {
+    return this.personService.remove(userId);
   }
 }

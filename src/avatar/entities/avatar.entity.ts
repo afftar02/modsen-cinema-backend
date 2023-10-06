@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Person } from '../../person/entities/person.entity';
 
 @Entity('avatar')
 export class Avatar {
@@ -13,4 +14,9 @@ export class Avatar {
 
   @Column()
   size: number;
+
+  @OneToOne(() => Person, (person) => person.avatar, {
+    nullable: true,
+  })
+  person: Person;
 }

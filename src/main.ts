@@ -37,9 +37,15 @@ async function bootstrap() {
   const config = new DocumentBuilder()
     .setTitle('Cinema-modsen')
     .setVersion('1.0')
+    .addBearerAuth()
     .build();
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('swagger', app, document);
+  SwaggerModule.setup('swagger', app, document, {
+    swaggerOptions: {
+      persistAuthorization: true,
+      tagsSorter: 'alpha',
+    },
+  });
 
   await app.listen(8080);
 }

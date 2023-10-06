@@ -8,6 +8,7 @@ import {
 } from 'typeorm';
 import { Ticket } from '../../ticket/entities/ticket.entity';
 import { Avatar } from '../../avatar/entities/avatar.entity';
+import { Token } from '../../token/entities/token.entity';
 
 @Entity('person')
 export class Person {
@@ -20,7 +21,9 @@ export class Person {
   @Column()
   surname: string;
 
-  @Column()
+  @Column({
+    unique: true,
+  })
   email: string;
 
   @Column()
@@ -32,10 +35,15 @@ export class Person {
   @OneToMany(() => Ticket, (ticket) => ticket.person)
   tickets: Ticket[];
 
-  @OneToOne(() => Avatar, {
+  @OneToOne(() => Avatar, (avatar) => avatar.person, {
     nullable: true,
     onDelete: 'SET NULL',
   })
   @JoinColumn()
   avatar: Avatar;
+
+  @OneToOne(() => Token, (token) => token.person, {
+    nullable: true,
+  })
+  token: Token;
 }

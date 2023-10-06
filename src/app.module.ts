@@ -13,6 +13,8 @@ import { TicketModule } from './ticket/ticket.module';
 import { SeatModule } from './seat/seat.module';
 import { PersonModule } from './person/person.module';
 import { AvatarModule } from './avatar/avatar.module';
+import { AuthModule } from './auth/auth.module';
+import { TokenModule } from './token/token.module';
 
 @Module({
   imports: [
@@ -39,6 +41,8 @@ import { AvatarModule } from './avatar/avatar.module';
     SeatModule,
     PersonModule,
     AvatarModule,
+    AuthModule,
+    TokenModule,
   ],
   providers: [Logger],
 })
