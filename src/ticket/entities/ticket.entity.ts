@@ -19,6 +19,9 @@ export class Ticket {
   @Column()
   isVisited: boolean;
 
+  @Column()
+  isMissed: boolean;
+
   @OneToMany(() => Seat, (seat) => seat.ticket)
   seats: Seat[];
 
