@@ -13,13 +13,19 @@ export class Ticket {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({
+    default: false,
+  })
   isPaid: boolean;
 
-  @Column()
+  @Column({
+    default: false,
+  })
   isVisited: boolean;
 
-  @Column()
+  @Column({
+    default: false,
+  })
   isMissed: boolean;
 
   @OneToMany(() => Seat, (seat) => seat.ticket)
