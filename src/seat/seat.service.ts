@@ -128,6 +128,21 @@ export class SeatService {
     });
   }
 
+  findById(id: number) {
+    return this.repository.findOne({
+      where: { id },
+      relations: {
+        session: true,
+        ticket: true,
+      },
+      select: {
+        ticket: {
+          id: true,
+        },
+      },
+    });
+  }
+
   async update(id: number, dto: UpdateSeatDto) {
     const seat = await this.repository.findOne({
       where: { id },

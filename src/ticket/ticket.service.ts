@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   ForbiddenException,
   Injectable,
   Logger,
@@ -54,10 +55,61 @@ export class TicketService {
     }
   }
 
+  checkFoundSeats(ticket: Ticket, dto: CreateTicketDto | UpdateTicketDto) {
+    if (ticket.seats.length !== dto.seatIds.length) {
+      const badRequestException = new BadRequestException(
+        'Ticket seats are not found',
+      );
+
+      this.logger.error(
+        'Unable to find ticket seats',
+        badRequestException.stack,
+      );
+
+      throw badRequestException;
+    }
+  }
+
+  async checkForSessionEnd(ticket: Ticket) {
+    const { session } = await this.seatService.findById(ticket.seats.at(0).id);
+    const currentDate = new Date();
+
+    if (currentDate >= session.end) {
+      const badRequestException = new BadRequestException('Session is ended');
+
+      this.logger.error(
+        'Session for current ticket is ended',
+        badRequestException.stack,
+      );
+
+      throw badRequestException;
+    }
+  }
+
+  async checkForBookedSeats(seatIds: number[]) {
+    for (const seatId of seatIds) {
+      const { ticket } = await this.seatService.findById(seatId);
+
+      if (ticket) {
+        const badRequestException = new BadRequestException(
+          'Seat is already booked',
+        );
+
+        this.logger.error('Seat is booked', badRequestException.stack);
+
+        throw badRequestException;
+      }
+    }
+  }
+
   async create(personId: number, dto: CreateTicketDto) {
     const ticket = this.repository.create(dto);
 
     ticket.seats = await this.seatService.findByIds(dto.seatIds);
+
+    this.checkFoundSeats(ticket, dto);
+    await this.checkForBookedSeats(dto.seatIds);
+    await this.checkForSessionEnd(ticket);
 
     return this.repository.save({
       ...ticket,
@@ -138,6 +190,14 @@ export class TicketService {
 
     if (dto.seatIds) {
       updateTicket.seats = await this.seatService.findByIds(dto.seatIds);
+
+      this.checkFoundSeats(updateTicket, dto);
+      await this.checkForBookedSeats(dto.seatIds);
+      await this.checkForSessionEnd(updateTicket);
+    }
+
+    if (dto.isPaid) {
+      await this.checkForSessionEnd(updateTicket);
     }
 
     return this.repository.save(updateTicket);
