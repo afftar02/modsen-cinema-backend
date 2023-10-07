@@ -37,6 +37,23 @@ export class TicketService {
     };
   }
 
+  async markMissed(ticket: Ticket) {
+    if (!ticket.isMissed) {
+      const currentDate = new Date();
+      const ticketIsNotPaidForStartedSession =
+        currentDate >= ticket.seats.at(0).session.start && !ticket.isPaid;
+      const paidSessionIsNotVisitedByPerson =
+        currentDate >= ticket.seats.at(0).session.end &&
+        ticket.isPaid &&
+        !ticket.isVisited;
+
+      if (ticketIsNotPaidForStartedSession || paidSessionIsNotVisitedByPerson) {
+        await this.repository.update(ticket.id, { isMissed: true });
+        ticket.isMissed = true;
+      }
+    }
+  }
+
   async create(personId: number, dto: CreateTicketDto) {
     const ticket = this.repository.create(dto);
 
@@ -67,6 +84,10 @@ export class TicketService {
         },
       },
     });
+
+    for (const ticket of tickets) {
+      await this.markMissed(ticket);
+    }
 
     return tickets.map((ticket) => this.getInfoFromTicket(ticket));
   }
@@ -101,6 +122,8 @@ export class TicketService {
 
       throw forbiddenException;
     }
+
+    await this.markMissed(ticket);
 
     return this.getInfoFromTicket(ticket);
   }
