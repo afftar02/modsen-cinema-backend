@@ -1,0 +1,27 @@
+services:
+  db:
+    image: postgres
+    restart: always
+    container_name: cinema-postgres
+    volumes:
+      - ./pgdata:/var/lib/postgresql/data
+    ports:
+      - '5432:5432'
+    env_file:
+      - .env
+    environment:
+      POSTGRES_DB: cinema_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: nest-cinema
+    ports:
+      - '8080:8080'
+    depends_on:
+      - db
+    volumes:
+      - ./src:/app/src
