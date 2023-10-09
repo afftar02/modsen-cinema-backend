@@ -28,6 +28,11 @@ export class Ticket {
   })
   isMissed: boolean;
 
+  @Column({
+    default: 0,
+  })
+  discount: number;
+
   @OneToMany(() => Seat, (seat) => seat.ticket)
   seats: Seat[];
 
