@@ -102,6 +102,29 @@ export class TicketService {
     }
   }
 
+  async checkForSameSession(seatIds: number[]) {
+    const { session: commonSession } = await this.seatService.findById(
+      seatIds.at(0),
+    );
+
+    for (const seatId of seatIds) {
+      const { session } = await this.seatService.findById(seatId);
+
+      if (session.id !== commonSession.id) {
+        const badRequestException = new BadRequestException(
+          'Ticket should have seats from the same session',
+        );
+
+        this.logger.error(
+          'Unable to create ticket with seats from different sessions',
+          badRequestException.stack,
+        );
+
+        throw badRequestException;
+      }
+    }
+  }
+
   async calculateDiscount(ticket: Ticket) {
     const { session } = await this.seatService.findById(ticket.seats.at(0).id);
     const currentDate = new Date();
@@ -124,6 +147,7 @@ export class TicketService {
     this.checkFoundSeats(ticket, dto);
     await this.checkForBookedSeats(dto.seatIds);
     await this.checkForSessionEnd(ticket);
+    await this.checkForSameSession(dto.seatIds);
 
     ticket.discount = await this.calculateDiscount(ticket);
 
@@ -210,6 +234,9 @@ export class TicketService {
       this.checkFoundSeats(updateTicket, dto);
       await this.checkForBookedSeats(dto.seatIds);
       await this.checkForSessionEnd(updateTicket);
+      await this.checkForSameSession(dto.seatIds);
+
+      ticket.discount = await this.calculateDiscount(updateTicket);
     }
 
     if (dto.isPaid) {
