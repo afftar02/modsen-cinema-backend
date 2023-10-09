@@ -102,6 +102,20 @@ export class TicketService {
     }
   }
 
+  async calculateDiscount(ticket: Ticket) {
+    const { session } = await this.seatService.findById(ticket.seats.at(0).id);
+    const currentDate = new Date();
+
+    if (
+      currentDate < session.start &&
+      session.start.getDate() - currentDate.getDate() <= 7
+    ) {
+      return 5 * (session.start.getDate() - currentDate.getDate());
+    } else {
+      return 0;
+    }
+  }
+
   async create(personId: number, dto: CreateTicketDto) {
     const ticket = this.repository.create(dto);
 
@@ -110,6 +124,8 @@ export class TicketService {
     this.checkFoundSeats(ticket, dto);
     await this.checkForBookedSeats(dto.seatIds);
     await this.checkForSessionEnd(ticket);
+
+    ticket.discount = await this.calculateDiscount(ticket);
 
     return this.repository.save({
       ...ticket,
