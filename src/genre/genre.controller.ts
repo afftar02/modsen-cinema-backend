@@ -11,6 +11,7 @@ import { GenreService } from './genre.service';
 import { CreateGenreDto } from './dto/create-genre.dto';
 import { UpdateGenreDto } from './dto/update-genre.dto';
 import { ApiTags } from '@nestjs/swagger';
+import { GenreCapitalizationPipe } from './pipes/genre-capitalization.pipe';
 
 @Controller()
 @ApiTags('Genre')
@@ -18,7 +19,7 @@ export class GenreController {
   constructor(private readonly genreService: GenreService) {}
 
   @Post('genre')
-  create(@Body() dto: CreateGenreDto) {
+  create(@Body(GenreCapitalizationPipe) dto: CreateGenreDto) {
     return this.genreService.create(dto);
   }
 
@@ -33,7 +34,10 @@ export class GenreController {
   }
 
   @Patch('genre/:id')
-  update(@Param('id') id: string, @Body() updateGenreDto: UpdateGenreDto) {
+  update(
+    @Param('id') id: string,
+    @Body(GenreCapitalizationPipe) updateGenreDto: UpdateGenreDto,
+  ) {
     return this.genreService.update(+id, updateGenreDto);
   }
 
