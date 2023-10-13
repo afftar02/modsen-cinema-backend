@@ -5,6 +5,6 @@ import { Transform } from 'class-transformer';
 export class CreateCountryDto {
   @ApiProperty()
   @IsNotEmpty({ message: 'Country title cannot be empty' })
-  @Transform(({ value }) => value.toUpperCase())
+  @Transform(({ value }) => value.toLowerCase())
   title: string;
 }
