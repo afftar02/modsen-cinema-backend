@@ -1,4 +1,9 @@
-import { Injectable, Logger, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  Logger,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateActorDto } from './dto/create-actor.dto';
 import { UpdateActorDto } from './dto/update-actor.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -13,8 +18,27 @@ export class ActorService {
     private readonly logger: Logger,
   ) {}
 
-  create(dto: CreateActorDto) {
+  async create(dto: CreateActorDto) {
+    const actor = await this.findByNameAndSurname(dto.name, dto.surname);
+
+    if (actor) {
+      const badRequestException = new BadRequestException(
+        'Actor is already exists!',
+      );
+
+      this.logger.error('Unable to create actor', badRequestException.stack);
+
+      throw badRequestException;
+    }
+
     return this.repository.save(dto);
+  }
+
+  findByNameAndSurname(name: string, surname: string) {
+    return this.repository.findOneBy({
+      name,
+      surname,
+    });
   }
 
   findAll() {
@@ -45,7 +69,22 @@ export class ActorService {
   }
 
   async update(id: number, dto: UpdateActorDto) {
-    await this.findOne(id);
+    const actorById = await this.findOne(id);
+
+    const existingActor = await this.findByNameAndSurname(
+      dto.name ?? actorById.name,
+      dto.surname ?? actorById.surname,
+    );
+
+    if (existingActor) {
+      const badRequestException = new BadRequestException(
+        'Actor is already exists!',
+      );
+
+      this.logger.error('Unable to create actor', badRequestException.stack);
+
+      throw badRequestException;
+    }
 
     return this.repository.update(id, dto);
   }
