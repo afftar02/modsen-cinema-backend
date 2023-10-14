@@ -4,11 +4,12 @@ import {
   Param,
   Delete,
   UseInterceptors,
-  UploadedFile,
+  UploadedFiles,
+  BadRequestException,
 } from '@nestjs/common';
 import { TrailerService } from './trailer.service';
 import { ApiBody, ApiConsumes, ApiTags } from '@nestjs/swagger';
-import { FileInterceptor } from '@nestjs/platform-express';
+import { FileFieldsInterceptor } from '@nestjs/platform-express';
 import { fileStorage } from '../storage';
 import { VIDEO_SIZE_LIMIT } from '../constants';
 
@@ -19,27 +20,57 @@ export class TrailerController {
 
   @Post()
   @UseInterceptors(
-    FileInterceptor('file', {
-      storage: fileStorage,
-      limits: {
-        fileSize: VIDEO_SIZE_LIMIT,
+    FileFieldsInterceptor(
+      [
+        { name: 'trailer', maxCount: 1 },
+        { name: 'preview', maxCount: 1 },
+      ],
+      {
+        storage: fileStorage,
+        limits: {
+          fileSize: VIDEO_SIZE_LIMIT,
+        },
+        fileFilter: (req: Request, file, cb) => {
+          if (
+            (file.fieldname === 'trailer' && file.mimetype !== 'video/mp4') ||
+            (file.fieldname === 'preview' && file.mimetype !== 'image/jpeg')
+          ) {
+            const badRequestException = new BadRequestException(
+              `Invalid ${file.fieldname} type`,
+            );
+
+            return cb(badRequestException, false);
+          }
+
+          return cb(null, true);
+        },
       },
-    }),
+    ),
   )
   @ApiConsumes('multipart/form-data')
   @ApiBody({
     schema: {
       type: 'object',
       properties: {
-        file: {
+        trailer: {
+          type: 'string',
+          format: 'binary',
+        },
+        preview: {
           type: 'string',
           format: 'binary',
         },
       },
     },
   })
-  create(@UploadedFile() file: Express.Multer.File) {
-    return this.trailerService.create(file);
+  create(
+    @UploadedFiles()
+    files: {
+      trailer: Express.Multer.File[];
+      preview: Express.Multer.File[];
+    },
+  ) {
+    return this.trailerService.create(files.trailer, files.preview);
   }
 
   @Delete(':id')
