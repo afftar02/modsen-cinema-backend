@@ -20,7 +20,7 @@ export class TrailerService {
     private readonly logger: Logger,
   ) {}
 
-  async create(
+  checkForEmptyFiles(
     trailerFile: Express.Multer.File[],
     previewFile: Express.Multer.File[],
   ) {
@@ -31,8 +31,17 @@ export class TrailerService {
 
       this.logger.error('Unable to create trailer', badRequestException.stack);
 
+      this.removeLocal(trailerFile, previewFile);
+
       throw badRequestException;
     }
+  }
+
+  async create(
+    trailerFile: Express.Multer.File[],
+    previewFile: Express.Multer.File[],
+  ) {
+    this.checkForEmptyFiles(trailerFile, previewFile);
 
     const trailer = this.repository.create(trailerFile.at(0));
 
@@ -73,5 +82,25 @@ export class TrailerService {
     await this.previewService.remove(trailer.preview.id);
 
     return deleteResult;
+  }
+
+  private removeLocal(
+    trailer: Express.Multer.File[],
+    preview: Express.Multer.File[],
+  ) {
+    if (trailer) {
+      fs.unlink(FILES_PATH + trailer.at(0).filename, (err) => {
+        if (err) {
+          throw err;
+        }
+      });
+    }
+    if (preview) {
+      fs.unlink(FILES_PATH + preview.at(0).filename, (err) => {
+        if (err) {
+          throw err;
+        }
+      });
+    }
   }
 }
