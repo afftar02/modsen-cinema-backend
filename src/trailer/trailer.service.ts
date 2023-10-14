@@ -32,6 +32,15 @@ export class TrailerService {
       this.logger.error('Unable to create trailer', badRequestException.stack);
 
       throw badRequestException;
+    } else if (
+      trailerFile.at(0).mimetype !== 'video/mp4' ||
+      previewFile.at(0).mimetype !== 'image/jpeg'
+    ) {
+      const badRequestException = new BadRequestException('Invalid files type');
+
+      this.logger.error('Unable to create trailer', badRequestException.stack);
+
+      throw badRequestException;
     }
 
     const trailer = this.repository.create(trailerFile.at(0));
