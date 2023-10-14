@@ -5,6 +5,7 @@ import {
   Delete,
   UseInterceptors,
   UploadedFiles,
+  BadRequestException,
 } from '@nestjs/common';
 import { TrailerService } from './trailer.service';
 import { ApiBody, ApiConsumes, ApiTags } from '@nestjs/swagger';
@@ -28,6 +29,20 @@ export class TrailerController {
         storage: fileStorage,
         limits: {
           fileSize: VIDEO_SIZE_LIMIT,
+        },
+        fileFilter: (req: Request, file, cb) => {
+          if (
+            (file.fieldname === 'trailer' && file.mimetype !== 'video/mp4') ||
+            (file.fieldname === 'preview' && file.mimetype !== 'image/jpeg')
+          ) {
+            const badRequestException = new BadRequestException(
+              `Invalid ${file.fieldname} type`,
+            );
+
+            return cb(badRequestException, false);
+          }
+
+          return cb(null, true);
         },
       },
     ),
