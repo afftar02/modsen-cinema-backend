@@ -11,7 +11,7 @@ import { TrailerService } from './trailer.service';
 import { ApiBody, ApiConsumes, ApiTags } from '@nestjs/swagger';
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
 import { fileStorage } from '../storage';
-import { VIDEO_SIZE_LIMIT } from '../constants';
+import { IMAGE_EXT, VIDEO_EXT, VIDEO_SIZE_LIMIT } from '../constants';
 
 @Controller('trailer')
 @ApiTags('Trailer')
@@ -32,8 +32,9 @@ export class TrailerController {
         },
         fileFilter: (req: Request, file, cb) => {
           if (
-            (file.fieldname === 'trailer' && file.mimetype !== 'video/mp4') ||
-            (file.fieldname === 'preview' && file.mimetype !== 'image/jpeg')
+            (file.fieldname === 'trailer' &&
+              !VIDEO_EXT.includes(file.mimetype)) ||
+            (file.fieldname === 'preview' && !IMAGE_EXT.includes(file.mimetype))
           ) {
             const badRequestException = new BadRequestException(
               `Invalid ${file.fieldname} type`,
