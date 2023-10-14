@@ -1,4 +1,11 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import { Preview } from '../../preview/entities/preview.entity';
 
 @Entity('trailer')
 export class Trailer {
@@ -13,4 +20,8 @@ export class Trailer {
 
   @Column()
   size: number;
+
+  @OneToOne(() => Preview, (preview) => preview.trailer)
+  @JoinColumn()
+  preview: Preview;
 }

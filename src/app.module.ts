@@ -15,6 +15,7 @@ import { PersonModule } from './person/person.module';
 import { AvatarModule } from './avatar/avatar.module';
 import { AuthModule } from './auth/auth.module';
 import { TokenModule } from './token/token.module';
+import { PreviewModule } from './preview/preview.module';
 
 @Module({
   imports: [
@@ -43,6 +44,7 @@ import { TokenModule } from './token/token.module';
     AvatarModule,
     AuthModule,
     TokenModule,
+    PreviewModule,
   ],
   providers: [Logger],
 })
