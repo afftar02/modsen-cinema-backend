@@ -6,12 +6,13 @@ import {
   UseInterceptors,
   UploadedFile,
   UseGuards,
+  BadRequestException,
 } from '@nestjs/common';
 import { AvatarService } from './avatar.service';
 import { ApiBearerAuth, ApiBody, ApiConsumes, ApiTags } from '@nestjs/swagger';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { fileStorage } from '../storage';
-import { IMAGE_SIZE_LIMIT } from '../constants';
+import { IMAGE_EXT, IMAGE_SIZE_LIMIT } from '../constants';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { UserId } from '../decorators/user-id.decorator';
 
@@ -28,6 +29,17 @@ export class AvatarController {
       storage: fileStorage,
       limits: {
         fileSize: IMAGE_SIZE_LIMIT,
+      },
+      fileFilter: (req: Request, file, cb) => {
+        if (!IMAGE_EXT.includes(file.mimetype)) {
+          const badRequestException = new BadRequestException(
+            `Invalid file type`,
+          );
+
+          return cb(badRequestException, false);
+        }
+
+        return cb(null, true);
       },
     }),
   )

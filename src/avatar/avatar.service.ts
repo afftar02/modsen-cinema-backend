@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   ForbiddenException,
   Injectable,
   Logger,
@@ -19,6 +20,16 @@ export class AvatarService {
   ) {}
 
   create(file: Express.Multer.File) {
+    if (!file) {
+      const badRequestException = new BadRequestException(
+        'Uploaded file cannot be empty',
+      );
+
+      this.logger.error('Unable to create avatar', badRequestException.stack);
+
+      throw badRequestException;
+    }
+
     return this.repository.save(file);
   }
 
@@ -52,7 +63,7 @@ export class AvatarService {
       throw notFoundException;
     }
 
-    if (userId !== avatar.person.id) {
+    if (avatar.person && userId !== avatar.person.id) {
       const forbiddenException = new ForbiddenException('No access');
 
       this.logger.error('No access', forbiddenException.stack);
