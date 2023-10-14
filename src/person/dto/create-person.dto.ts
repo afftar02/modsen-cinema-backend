@@ -31,8 +31,4 @@ export class CreatePersonDto {
     message: 'Gender must be equal to MALE or FEMALE',
   })
   gender: string;
-
-  @ApiProperty()
-  @IsOptional()
-  avatarId: number;
 }

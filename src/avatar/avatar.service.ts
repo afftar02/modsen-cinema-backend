@@ -19,7 +19,7 @@ export class AvatarService {
     private readonly logger: Logger,
   ) {}
 
-  create(file: Express.Multer.File) {
+  create(userId: number, file: Express.Multer.File) {
     if (!file) {
       const badRequestException = new BadRequestException(
         'Uploaded file cannot be empty',
@@ -30,7 +30,12 @@ export class AvatarService {
       throw badRequestException;
     }
 
-    return this.repository.save(file);
+    return this.repository.save({
+      ...file,
+      person: {
+        id: userId,
+      },
+    });
   }
 
   async findOne(id: number) {
