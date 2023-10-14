@@ -55,8 +55,8 @@ export class AvatarController {
       },
     },
   })
-  create(@UploadedFile() file: Express.Multer.File) {
-    return this.avatarService.create(file);
+  create(@UserId() userId: number, @UploadedFile() file: Express.Multer.File) {
+    return this.avatarService.create(userId, file);
   }
 
   @Delete(':id')
