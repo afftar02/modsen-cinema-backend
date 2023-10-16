@@ -22,11 +22,25 @@ export class Movie {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
-  title: string;
+  @Column({
+    default: 'English title',
+  })
+  title_en: string;
 
-  @Column()
-  description: string;
+  @Column({
+    default: 'Russian title',
+  })
+  title_ru: string;
+
+  @Column({
+    default: 'English description',
+  })
+  description_en: string;
+
+  @Column({
+    default: 'Russian description',
+  })
+  description_ru: string;
 
   @Column({ type: 'real', nullable: true })
   rating: number;

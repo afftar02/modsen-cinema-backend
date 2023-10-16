@@ -12,12 +12,20 @@ import { Type } from 'class-transformer';
 
 export class CreateMovieDto {
   @ApiProperty()
-  @IsNotEmpty({ message: 'Movie title cannot be empty' })
-  title: string;
+  @IsNotEmpty({ message: 'English title cannot be empty' })
+  title_en: string;
 
   @ApiProperty()
-  @IsNotEmpty({ message: 'Movie description cannot be empty' })
-  description: string;
+  @IsNotEmpty({ message: 'Russian title cannot be empty' })
+  title_ru: string;
+
+  @ApiProperty()
+  @IsNotEmpty({ message: 'English description cannot be empty' })
+  description_en: string;
+
+  @ApiProperty()
+  @IsNotEmpty({ message: 'Russian description cannot be empty' })
+  description_ru: string;
 
   @ApiProperty({
     minimum: 0,
