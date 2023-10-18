@@ -67,7 +67,9 @@ export class MovieService {
         actors: true,
         genres: true,
         poster: true,
-        trailer: true,
+        trailer: {
+          preview: true,
+        },
       },
     });
 
