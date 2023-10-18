@@ -1,4 +1,9 @@
-import { Injectable, Logger, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  Logger,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateGenreDto } from './dto/create-genre.dto';
 import { UpdateGenreDto } from './dto/update-genre.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -13,8 +18,26 @@ export class GenreService {
     private readonly logger: Logger,
   ) {}
 
-  create(dto: CreateGenreDto) {
+  async create(dto: CreateGenreDto) {
+    const genre = await this.findByTitle(dto.title);
+
+    if (genre) {
+      const badRequestException = new BadRequestException(
+        'Genre is already exists!',
+      );
+
+      this.logger.error('Unable to create genre', badRequestException.stack);
+
+      throw badRequestException;
+    }
+
     return this.repository.save(dto);
+  }
+
+  findByTitle(title: string) {
+    return this.repository.findOne({
+      where: { title },
+    });
   }
 
   findAll() {
@@ -46,6 +69,20 @@ export class GenreService {
 
   async update(id: number, dto: UpdateGenreDto) {
     await this.findOne(id);
+
+    if (dto.title) {
+      const genre = await this.findByTitle(dto.title);
+
+      if (genre) {
+        const badRequestException = new BadRequestException(
+          'Genre is already exists!',
+        );
+
+        this.logger.error('Unable to update genre', badRequestException.stack);
+
+        throw badRequestException;
+      }
+    }
 
     return this.repository.update(id, dto);
   }

@@ -1,4 +1,9 @@
-import { Injectable, Logger, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  Logger,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Poster } from './entities/poster.entity';
@@ -14,6 +19,16 @@ export class PosterService {
   ) {}
 
   create(file: Express.Multer.File) {
+    if (!file) {
+      const badRequestException = new BadRequestException(
+        'Uploaded file cannot be empty',
+      );
+
+      this.logger.error('Unable to create poster', badRequestException.stack);
+
+      throw badRequestException;
+    }
+
     return this.repository.save(file);
   }
 

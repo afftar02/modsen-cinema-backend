@@ -18,6 +18,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    command: npm run start:dev
     container_name: nest-cinema
     ports:
       - '8080:8080'

@@ -6,7 +6,9 @@ export class Genre {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({
+    unique: true,
+  })
   title: string;
 
   @ManyToMany(() => Movie, (movie) => movie.genres)

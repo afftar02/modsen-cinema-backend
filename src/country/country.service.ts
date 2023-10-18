@@ -1,4 +1,9 @@
-import { Injectable, Logger, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  Logger,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateCountryDto } from './dto/create-country.dto';
 import { UpdateCountryDto } from './dto/update-country.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -13,8 +18,26 @@ export class CountryService {
     private readonly logger: Logger,
   ) {}
 
-  create(dto: CreateCountryDto) {
+  async create(dto: CreateCountryDto) {
+    const country = await this.findByTitle(dto.title);
+
+    if (country) {
+      const badRequestException = new BadRequestException(
+        'Country is already exists!',
+      );
+
+      this.logger.error('Unable to create country', badRequestException.stack);
+
+      throw badRequestException;
+    }
+
     return this.repository.save(dto);
+  }
+
+  findByTitle(title: string) {
+    return this.repository.findOne({
+      where: { title },
+    });
   }
 
   findAll() {
@@ -40,6 +63,23 @@ export class CountryService {
 
   async update(id: number, dto: UpdateCountryDto) {
     await this.findOne(id);
+
+    if (dto.title) {
+      const country = await this.findByTitle(dto.title);
+
+      if (country) {
+        const badRequestException = new BadRequestException(
+          'Country is already exists!',
+        );
+
+        this.logger.error(
+          'Unable to update country',
+          badRequestException.stack,
+        );
+
+        throw badRequestException;
+      }
+    }
 
     return this.repository.update(id, dto);
   }

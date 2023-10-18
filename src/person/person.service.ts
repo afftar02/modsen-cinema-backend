@@ -36,10 +36,6 @@ export class PersonService {
 
     const person = this.repository.create(dto);
 
-    if (dto.avatarId) {
-      person.avatar = await this.avatarService.findOne(dto.avatarId);
-    }
-
     person.password = await this.getPasswordHash(person.password);
 
     return this.repository.save(person);
@@ -75,14 +71,6 @@ export class PersonService {
       ...person,
       ...this.repository.create(dto),
     };
-
-    if (dto.avatarId) {
-      updatePerson.avatar = await this.avatarService.findOne(dto.avatarId);
-    }
-
-    if (dto.avatarId && person.avatar) {
-      await this.avatarService.remove(person.id, person.avatar.id);
-    }
 
     if (dto.password) {
       updatePerson.password = await this.getPasswordHash(dto.password);
