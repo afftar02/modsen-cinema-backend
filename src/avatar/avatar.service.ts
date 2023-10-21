@@ -19,7 +19,7 @@ export class AvatarService {
     private readonly logger: Logger,
   ) {}
 
-  create(userId: number, file: Express.Multer.File) {
+  async create(userId: number, file: Express.Multer.File) {
     if (!file) {
       const badRequestException = new BadRequestException(
         'Uploaded file cannot be empty',
@@ -30,12 +30,20 @@ export class AvatarService {
       throw badRequestException;
     }
 
-    return this.repository.save({
+    const previousAvatar = await this.findByUserId(userId);
+
+    const result = await this.repository.save({
       ...file,
       person: {
         id: userId,
       },
     });
+
+    if (previousAvatar) {
+      await this.remove(userId, previousAvatar.id);
+    }
+
+    return result;
   }
 
   async findOne(id: number) {
@@ -50,6 +58,16 @@ export class AvatarService {
     }
 
     return avatar;
+  }
+
+  findByUserId(userId: number) {
+    return this.repository.findOne({
+      where: {
+        person: {
+          id: userId,
+        },
+      },
+    });
   }
 
   async remove(userId: number, id: number) {
