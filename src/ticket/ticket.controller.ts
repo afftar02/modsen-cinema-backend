@@ -14,6 +14,7 @@ import { UpdateTicketDto } from './dto/update-ticket.dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { UserId } from '../decorators/user-id.decorator';
+import { LanguageValidationPipe } from '../language-validation.pipe';
 
 @Controller()
 @ApiTags('Ticket')
@@ -27,14 +28,21 @@ export class TicketController {
     return this.ticketService.create(userId, dto);
   }
 
-  @Get('tickets')
-  findByPersonId(@UserId() userId: number) {
-    return this.ticketService.findByPersonId(userId);
+  @Get(':language/tickets')
+  findByPersonId(
+    @UserId() userId: number,
+    @Param('language', LanguageValidationPipe) language: string,
+  ) {
+    return this.ticketService.findByPersonId(userId, language);
   }
 
-  @Get('ticket/:id')
-  findOne(@UserId() userId: number, @Param('id') id: string) {
-    return this.ticketService.findOne(userId, +id);
+  @Get(':language/ticket/:id')
+  findOne(
+    @UserId() userId: number,
+    @Param('id') id: string,
+    @Param('language', LanguageValidationPipe) language: string,
+  ) {
+    return this.ticketService.findOne(userId, +id, language);
   }
 
   @Patch('ticket/:id')

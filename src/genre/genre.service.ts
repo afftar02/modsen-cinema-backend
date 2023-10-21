@@ -54,6 +54,11 @@ export class GenreService {
     const genre = await this.repository.findOne({
       where: { id },
       relations: { movies: true },
+      select: {
+        movies: {
+          id: true,
+        },
+      },
     });
 
     if (!genre) {

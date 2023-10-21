@@ -55,6 +55,11 @@ export class ActorService {
     const actor = await this.repository.findOne({
       where: { id },
       relations: { movies: true },
+      select: {
+        movies: {
+          id: true,
+        },
+      },
     });
 
     if (!actor) {
