@@ -9,23 +9,17 @@ import {
   MinDate,
 } from 'class-validator';
 import { Type } from 'class-transformer';
+import { CreateTitleDto } from './create-title.dto';
+import { CreateDescriptionDto } from './create-description.dto';
 
 export class CreateMovieDto {
   @ApiProperty()
-  @IsNotEmpty({ message: 'English title cannot be empty' })
-  title_en: string;
+  @IsNotEmpty({ message: 'Title cannot be empty' })
+  title: CreateTitleDto;
 
   @ApiProperty()
-  @IsNotEmpty({ message: 'Russian title cannot be empty' })
-  title_ru: string;
-
-  @ApiProperty()
-  @IsNotEmpty({ message: 'English description cannot be empty' })
-  description_en: string;
-
-  @ApiProperty()
-  @IsNotEmpty({ message: 'Russian description cannot be empty' })
-  description_ru: string;
+  @IsNotEmpty({ message: 'Description cannot be empty' })
+  description: CreateDescriptionDto;
 
   @ApiProperty({
     minimum: 0,

@@ -7,3 +7,5 @@ export const FILES_PATH = './uploads/';
 export const IMAGE_EXT = ['image/jpeg', 'image/png'];
 
 export const VIDEO_EXT = ['video/mp4'];
+
+export const LANGUAGES = ['en', 'ru'];

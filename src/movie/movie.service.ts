@@ -9,6 +9,7 @@ import { ActorService } from '../actor/actor.service';
 import { GenreService } from '../genre/genre.service';
 import { PosterService } from '../poster/poster.service';
 import { TrailerService } from '../trailer/trailer.service';
+import { FindMovieDto } from './dto/find-movie.dto';
 
 @Injectable()
 export class MovieService {
@@ -39,6 +40,16 @@ export class MovieService {
     if (dto.trailerId) {
       movie.trailer = await this.trailerService.findOne(dto.trailerId);
     }
+    if (dto.title) {
+      for (const translation in dto.title) {
+        movie[`title_${translation}`] = dto.title[translation];
+      }
+    }
+    if (dto.description) {
+      for (const translation in dto.description) {
+        movie[`description_${translation}`] = dto.description[translation];
+      }
+    }
   }
 
   async create(dto: CreateMovieDto) {
@@ -49,13 +60,15 @@ export class MovieService {
     return this.repository.save(movie);
   }
 
-  findAll() {
-    return this.repository.find({
+  async findAllLocalized(language: string) {
+    const movies = await this.repository.find({
       relations: {
         genres: true,
         poster: true,
       },
     });
+
+    return movies.map((movie) => new FindMovieDto(movie, language));
   }
 
   async findOne(id: number) {
@@ -82,6 +95,12 @@ export class MovieService {
     }
 
     return movie;
+  }
+
+  async findOneLocalized(id: number, language: string) {
+    const movie = await this.findOne(id);
+
+    return new FindMovieDto(movie, language);
   }
 
   async update(id: number, dto: UpdateMovieDto) {
