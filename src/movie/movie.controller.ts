@@ -11,6 +11,7 @@ import { MovieService } from './movie.service';
 import { CreateMovieDto } from './dto/create-movie.dto';
 import { UpdateMovieDto } from './dto/update-movie.dto';
 import { ApiTags } from '@nestjs/swagger';
+import { LanguageValidationPipe } from '../language-validation.pipe';
 
 @Controller()
 @ApiTags('Movie')
@@ -22,14 +23,17 @@ export class MovieController {
     return this.movieService.create(dto);
   }
 
-  @Get('movies')
-  findAll() {
-    return this.movieService.findAll();
+  @Get('movies/:language')
+  findAll(@Param('language', LanguageValidationPipe) language: string) {
+    return this.movieService.findAllLocalized(language);
   }
 
-  @Get('movie/:id')
-  findOne(@Param('id') id: string) {
-    return this.movieService.findOne(+id);
+  @Get('movie/:id/:language')
+  findOne(
+    @Param('id') id: string,
+    @Param('language', LanguageValidationPipe) language: string,
+  ) {
+    return this.movieService.findOneLocalized(+id, language);
   }
 
   @Patch('movie/:id')
