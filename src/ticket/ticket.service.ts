@@ -11,6 +11,8 @@ import { Repository } from 'typeorm';
 import { Ticket } from './entities/ticket.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { SeatService } from '../seat/seat.service';
+import { FindMovieDto } from '../movie/dto/find-movie.dto';
+import { LANGUAGES } from '../constants';
 
 @Injectable()
 export class TicketService {
@@ -21,7 +23,7 @@ export class TicketService {
     private readonly logger: Logger,
   ) {}
 
-  getInfoFromTicket(ticket: Ticket) {
+  getInfoFromTicket(ticket: Ticket, language: string) {
     const { seats, person, ...ticketInfo } = ticket;
     const seatsInfo = seats.map((seat) => {
       const { session, ...info } = seat;
@@ -34,7 +36,7 @@ export class TicketService {
       ...ticketInfo,
       seats: seatsInfo,
       session: sessionInfo,
-      movie: movie,
+      movie: new FindMovieDto(movie, language),
     };
   }
 
@@ -159,7 +161,7 @@ export class TicketService {
     });
   }
 
-  async findByPersonId(personId: number) {
+  async findByPersonId(personId: number, language: string) {
     const tickets = await this.repository.find({
       where: {
         person: {
@@ -181,10 +183,14 @@ export class TicketService {
       await this.markMissed(ticket);
     }
 
-    return tickets.map((ticket) => this.getInfoFromTicket(ticket));
+    return tickets.map((ticket) => this.getInfoFromTicket(ticket, language));
   }
 
-  async findOne(personId: number, id: number) {
+  async findOne(
+    personId: number,
+    id: number,
+    language: string = LANGUAGES.at(0),
+  ) {
     const ticket = await this.repository.findOne({
       where: { id },
       relations: {
@@ -217,7 +223,7 @@ export class TicketService {
 
     await this.markMissed(ticket);
 
-    return this.getInfoFromTicket(ticket);
+    return this.getInfoFromTicket(ticket, language);
   }
 
   async update(personId: number, id: number, dto: UpdateTicketDto) {

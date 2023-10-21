@@ -23,12 +23,12 @@ export class MovieController {
     return this.movieService.create(dto);
   }
 
-  @Get('movies/:language')
+  @Get(':language/movies')
   findAll(@Param('language', LanguageValidationPipe) language: string) {
     return this.movieService.findAllLocalized(language);
   }
 
-  @Get('movie/:id/:language')
+  @Get(':language/movie/:id')
   findOne(
     @Param('id') id: string,
     @Param('language', LanguageValidationPipe) language: string,

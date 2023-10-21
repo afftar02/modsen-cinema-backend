@@ -48,6 +48,11 @@ export class CountryService {
     const country = await this.repository.findOne({
       where: { id },
       relations: { movies: true },
+      select: {
+        movies: {
+          id: true,
+        },
+      },
     });
 
     if (!country) {
