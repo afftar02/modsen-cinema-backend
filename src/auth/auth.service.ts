@@ -89,4 +89,14 @@ export class AuthService {
       }),
     };
   }
+
+  async thirdPartyAuth(userDto: CreatePersonDto) {
+    const user = await this.personService.findByEmail(userDto.email);
+
+    if (user) {
+      return this.login(user);
+    }
+
+    return this.register(userDto);
+  }
 }

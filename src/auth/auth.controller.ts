@@ -1,10 +1,19 @@
-import { Controller, Post, UseGuards, Request, Body } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  UseGuards,
+  Request,
+  Body,
+  Get,
+  Req,
+} from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { ApiBearerAuth, ApiBody, ApiTags } from '@nestjs/swagger';
 import { LocalAuthGuard } from './guards/local-auth.guard';
 import { LoginDto } from './dto/login.dto';
 import { CreatePersonDto } from '../person/dto/create-person.dto';
 import { RefreshGuard } from './guards/refresh.guard';
+import { GoogleOauthGuard } from './guards/google-oauth.guard';
 
 @Controller('auth')
 @ApiTags('Auth')
@@ -28,5 +37,15 @@ export class AuthController {
   @Post('refresh')
   refresh(@Request() req) {
     return this.authService.refreshToken(+req.user.sub, req.user.refreshToken);
+  }
+
+  @Get('google')
+  @UseGuards(GoogleOauthGuard)
+  googleAuth() {}
+
+  @Get('google/callback')
+  @UseGuards(GoogleOauthGuard)
+  async googleAuthCallback(@Req() req) {
+    return this.authService.thirdPartyAuth(req.user);
   }
 }
