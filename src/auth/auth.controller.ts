@@ -6,7 +6,9 @@ import {
   Body,
   Get,
   Req,
+  Res,
 } from '@nestjs/common';
+import { Response } from 'express';
 import { AuthService } from './auth.service';
 import { ApiBearerAuth, ApiBody, ApiTags } from '@nestjs/swagger';
 import { LocalAuthGuard } from './guards/local-auth.guard';
@@ -45,7 +47,14 @@ export class AuthController {
 
   @Get('google/callback')
   @UseGuards(GoogleOauthGuard)
-  async googleAuthCallback(@Req() req) {
-    return this.authService.thirdPartyAuth(req.user);
+  async googleAuthCallback(@Req() req, @Res() res: Response) {
+    const tokens = await this.authService.thirdPartyAuth(req.user);
+
+    res.cookie('tokens', tokens, {
+      sameSite: true,
+      secure: false,
+    });
+
+    return res.redirect(process.env.AUTH_SUCCESS_REDIRECT);
   }
 }
