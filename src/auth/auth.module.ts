@@ -10,6 +10,7 @@ import { TokenModule } from '../token/token.module';
 import { RefreshStrategy } from './strategies/refresh.strategy';
 import { GoogleStrategy } from './strategies/google.strategy';
 import { FacebookStrategy } from './strategies/facebook.strategy';
+import { GithubStrategy } from './strategies/github.strategy';
 
 @Module({
   imports: [PersonModule, PassportModule, TokenModule, JwtModule.register({})],
@@ -21,6 +22,7 @@ import { FacebookStrategy } from './strategies/facebook.strategy';
     RefreshStrategy,
     GoogleStrategy,
     FacebookStrategy,
+    GithubStrategy,
   ],
 })
 export class AuthModule {}
