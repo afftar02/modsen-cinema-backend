@@ -9,6 +9,7 @@ import { JwtStrategy } from './strategies/jwt.strategy';
 import { TokenModule } from '../token/token.module';
 import { RefreshStrategy } from './strategies/refresh.strategy';
 import { GoogleStrategy } from './strategies/google.strategy';
+import { FacebookStrategy } from './strategies/facebook.strategy';
 
 @Module({
   imports: [PersonModule, PassportModule, TokenModule, JwtModule.register({})],
@@ -19,6 +20,7 @@ import { GoogleStrategy } from './strategies/google.strategy';
     JwtStrategy,
     RefreshStrategy,
     GoogleStrategy,
+    FacebookStrategy,
   ],
 })
 export class AuthModule {}

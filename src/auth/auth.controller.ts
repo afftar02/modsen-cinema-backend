@@ -16,6 +16,7 @@ import { LoginDto } from './dto/login.dto';
 import { CreatePersonDto } from '../person/dto/create-person.dto';
 import { RefreshGuard } from './guards/refresh.guard';
 import { GoogleOauthGuard } from './guards/google-oauth.guard';
+import { FacebookOauthGuard } from './guards/facebook-oauth.guard';
 
 @Controller('auth')
 @ApiTags('Auth')
@@ -48,6 +49,23 @@ export class AuthController {
   @Get('google/callback')
   @UseGuards(GoogleOauthGuard)
   async googleAuthCallback(@Req() req, @Res() res: Response) {
+    const tokens = await this.authService.thirdPartyAuth(req.user);
+
+    res.cookie('tokens', tokens, {
+      sameSite: true,
+      secure: false,
+    });
+
+    return res.redirect(process.env.AUTH_SUCCESS_REDIRECT);
+  }
+
+  @Get('facebook')
+  @UseGuards(FacebookOauthGuard)
+  facebookAuth() {}
+
+  @Get('facebook/callback')
+  @UseGuards(FacebookOauthGuard)
+  async facebookAuthCallback(@Req() req, @Res() res: Response) {
     const tokens = await this.authService.thirdPartyAuth(req.user);
 
     res.cookie('tokens', tokens, {
