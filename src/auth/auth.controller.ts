@@ -53,7 +53,9 @@ export class AuthController {
     const tokens = await this.authService.thirdPartyAuth(req.user);
 
     res.cookie('tokens', tokens, {
-      sameSite: 'lax',
+      maxAge: 2592000000,
+      sameSite: true,
+      secure: false,
     });
 
     return res.redirect(process.env.AUTH_SUCCESS_REDIRECT);
@@ -69,7 +71,9 @@ export class AuthController {
     const tokens = await this.authService.thirdPartyAuth(req.user);
 
     res.cookie('tokens', tokens, {
-      sameSite: 'lax',
+      maxAge: 2592000000,
+      sameSite: true,
+      secure: false,
     });
 
     return res.redirect(process.env.AUTH_SUCCESS_REDIRECT);
@@ -85,7 +89,9 @@ export class AuthController {
     const tokens = await this.authService.thirdPartyAuth(req.user);
 
     res.cookie('tokens', tokens, {
-      sameSite: 'lax',
+      maxAge: 2592000000,
+      sameSite: true,
+      secure: false,
     });
 
     return res.redirect(process.env.AUTH_SUCCESS_REDIRECT);
