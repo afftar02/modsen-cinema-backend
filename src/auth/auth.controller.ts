@@ -54,7 +54,6 @@ export class AuthController {
 
     res.cookie('tokens', tokens, {
       sameSite: 'none',
-      secure: true,
     });
 
     return res.redirect(process.env.AUTH_SUCCESS_REDIRECT);
@@ -71,7 +70,6 @@ export class AuthController {
 
     res.cookie('tokens', tokens, {
       sameSite: 'none',
-      secure: true,
     });
 
     return res.redirect(process.env.AUTH_SUCCESS_REDIRECT);
@@ -88,7 +86,6 @@ export class AuthController {
 
     res.cookie('tokens', tokens, {
       sameSite: 'none',
-      secure: true,
     });
 
     return res.redirect(process.env.AUTH_SUCCESS_REDIRECT);
