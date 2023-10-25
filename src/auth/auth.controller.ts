@@ -70,7 +70,10 @@ export class AuthController {
 
   @Get('facebook/callback')
   @UseGuards(FacebookOauthGuard)
-  async facebookAuthCallback(@Req() req, @Res() res: Response) {
+  async facebookAuthCallback(
+    @Req() req,
+    @Res({ passthrough: true }) res: Response,
+  ) {
     const tokens = await this.authService.thirdPartyAuth(req.user);
 
     res.cookie('tokens', tokens, {
@@ -88,7 +91,10 @@ export class AuthController {
 
   @Get('github/callback')
   @UseGuards(GithubOauthGuard)
-  async githubAuthCallback(@Req() req, @Res() res: Response) {
+  async githubAuthCallback(
+    @Req() req,
+    @Res({ passthrough: true }) res: Response,
+  ) {
     const tokens = await this.authService.thirdPartyAuth(req.user);
 
     res.cookie('tokens', tokens, {
