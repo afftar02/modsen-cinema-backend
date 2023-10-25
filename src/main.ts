@@ -12,7 +12,6 @@ import { instance } from '../logger/winston.logger';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
-    cors: false,
     logger: WinstonModule.createLogger({
       instance: instance,
     }),
