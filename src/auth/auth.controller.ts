@@ -52,7 +52,10 @@ export class AuthController {
   async googleAuthCallback(@Req() req, @Res() res: Response) {
     const tokens = await this.authService.thirdPartyAuth(req.user);
 
-    res.cookie('tokens', tokens);
+    res.cookie('tokens', tokens, {
+      secure: true,
+      domain: process.env.COOKIE_DOMAIN,
+    });
 
     return res.redirect(process.env.AUTH_SUCCESS_REDIRECT);
   }
@@ -66,7 +69,10 @@ export class AuthController {
   async facebookAuthCallback(@Req() req, @Res() res: Response) {
     const tokens = await this.authService.thirdPartyAuth(req.user);
 
-    res.cookie('tokens', tokens);
+    res.cookie('tokens', tokens, {
+      secure: true,
+      domain: process.env.COOKIE_DOMAIN,
+    });
 
     return res.redirect(process.env.AUTH_SUCCESS_REDIRECT);
   }
@@ -80,7 +86,10 @@ export class AuthController {
   async githubAuthCallback(@Req() req, @Res() res: Response) {
     const tokens = await this.authService.thirdPartyAuth(req.user);
 
-    res.cookie('tokens', tokens);
+    res.cookie('tokens', tokens, {
+      secure: true,
+      domain: process.env.COOKIE_DOMAIN,
+    });
 
     return res.redirect(process.env.AUTH_SUCCESS_REDIRECT);
   }
