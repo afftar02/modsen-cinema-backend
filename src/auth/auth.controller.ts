@@ -49,15 +49,13 @@ export class AuthController {
 
   @Get('google/callback')
   @UseGuards(GoogleOauthGuard)
-  async googleAuthCallback(
-    @Req() req,
-    @Res({ passthrough: true }) res: Response,
-  ) {
+  async googleAuthCallback(@Req() req, @Res() res: Response) {
     const tokens = await this.authService.thirdPartyAuth(req.user);
 
     res.cookie('tokens', tokens, {
       secure: true,
       sameSite: 'none',
+      path: '/',
       domain: process.env.COOKIE_DOMAIN,
     });
 
@@ -70,15 +68,13 @@ export class AuthController {
 
   @Get('facebook/callback')
   @UseGuards(FacebookOauthGuard)
-  async facebookAuthCallback(
-    @Req() req,
-    @Res({ passthrough: true }) res: Response,
-  ) {
+  async facebookAuthCallback(@Req() req, @Res() res: Response) {
     const tokens = await this.authService.thirdPartyAuth(req.user);
 
     res.cookie('tokens', tokens, {
       secure: true,
       sameSite: 'none',
+      path: '/',
       domain: process.env.COOKIE_DOMAIN,
     });
 
@@ -91,15 +87,13 @@ export class AuthController {
 
   @Get('github/callback')
   @UseGuards(GithubOauthGuard)
-  async githubAuthCallback(
-    @Req() req,
-    @Res({ passthrough: true }) res: Response,
-  ) {
+  async githubAuthCallback(@Req() req, @Res() res: Response) {
     const tokens = await this.authService.thirdPartyAuth(req.user);
 
     res.cookie('tokens', tokens, {
       secure: true,
       sameSite: 'none',
+      path: '/',
       domain: process.env.COOKIE_DOMAIN,
     });
 
