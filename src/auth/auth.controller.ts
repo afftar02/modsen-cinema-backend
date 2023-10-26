@@ -52,12 +52,10 @@ export class AuthController {
   async googleAuthCallback(@Req() req, @Res() res: Response) {
     const tokens = await this.authService.thirdPartyAuth(req.user);
 
-    res.cookie('tokens', tokens, {
-      sameSite: 'none',
-      secure: true,
-    });
-
-    return res.redirect(process.env.AUTH_SUCCESS_REDIRECT);
+    return res.redirect(
+      process.env.AUTH_SUCCESS_REDIRECT +
+        `?accessToken=${tokens.access_token}&refreshToken=${tokens.refresh_token}`,
+    );
   }
 
   @Get('facebook')
@@ -69,12 +67,10 @@ export class AuthController {
   async facebookAuthCallback(@Req() req, @Res() res: Response) {
     const tokens = await this.authService.thirdPartyAuth(req.user);
 
-    res.cookie('tokens', tokens, {
-      sameSite: 'none',
-      secure: true,
-    });
-
-    return res.redirect(process.env.AUTH_SUCCESS_REDIRECT);
+    return res.redirect(
+      process.env.AUTH_SUCCESS_REDIRECT +
+        `?accessToken=${tokens.access_token}&refreshToken=${tokens.refresh_token}`,
+    );
   }
 
   @Get('github')
@@ -86,11 +82,9 @@ export class AuthController {
   async githubAuthCallback(@Req() req, @Res() res: Response) {
     const tokens = await this.authService.thirdPartyAuth(req.user);
 
-    res.cookie('tokens', tokens, {
-      sameSite: 'none',
-      secure: true,
-    });
-
-    return res.redirect(process.env.AUTH_SUCCESS_REDIRECT);
+    return res.redirect(
+      process.env.AUTH_SUCCESS_REDIRECT +
+        `?accessToken=${tokens.access_token}&refreshToken=${tokens.refresh_token}`,
+    );
   }
 }
