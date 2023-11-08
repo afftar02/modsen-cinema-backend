@@ -32,7 +32,7 @@ describe('ActorController', () => {
       providers: [
         ActorService,
         {
-          provide: getRepositoryToken(Actor), // Replace with your actual entity class
+          provide: getRepositoryToken(Actor),
           useValue: mockRepository,
         },
         {
