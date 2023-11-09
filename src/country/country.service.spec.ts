@@ -20,6 +20,10 @@ describe('CountryService', () => {
     delete: jest.fn(),
   };
 
+  const mockLogger = {
+    error: jest.fn(),
+  };
+
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
@@ -28,7 +32,10 @@ describe('CountryService', () => {
           provide: getRepositoryToken(Country),
           useValue: mockRepository,
         },
-        Logger,
+        {
+          provide: Logger,
+          useValue: mockLogger,
+        },
       ],
     }).compile();
 

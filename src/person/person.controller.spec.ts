@@ -13,6 +13,10 @@ describe('PersonController', () => {
   let personController: PersonController;
   let personService: PersonService;
 
+  const mockLogger = {
+    error: jest.fn(),
+  };
+
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [PersonController],
@@ -27,7 +31,10 @@ describe('PersonController', () => {
           provide: getRepositoryToken(Avatar),
           useClass: Repository,
         },
-        Logger,
+        {
+          provide: Logger,
+          useValue: mockLogger,
+        },
       ],
     }).compile();
 

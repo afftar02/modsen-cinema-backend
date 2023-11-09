@@ -14,6 +14,10 @@ describe('PersonService', () => {
   let avatarService: AvatarService;
   let personRepository: Repository<Person>;
 
+  const mockLogger = {
+    error: jest.fn(),
+  };
+
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
@@ -27,7 +31,10 @@ describe('PersonService', () => {
           provide: getRepositoryToken(Avatar),
           useClass: Repository,
         },
-        Logger,
+        {
+          provide: Logger,
+          useValue: mockLogger,
+        },
       ],
     }).compile();
 

@@ -12,6 +12,10 @@ describe('GenreController', () => {
   let genreController: GenreController;
   let genreService: GenreService;
 
+  const mockLogger = {
+    error: jest.fn(),
+  };
+
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [GenreController],
@@ -21,7 +25,10 @@ describe('GenreController', () => {
           provide: getRepositoryToken(Genre),
           useClass: Repository,
         },
-        Logger,
+        {
+          provide: Logger,
+          useValue: mockLogger,
+        },
       ],
     }).compile();
 

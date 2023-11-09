@@ -19,6 +19,10 @@ describe('CountryController', () => {
     delete: jest.fn(),
   };
 
+  const mockLogger = {
+    error: jest.fn(),
+  };
+
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [CountryController],
@@ -28,7 +32,10 @@ describe('CountryController', () => {
           provide: getRepositoryToken(Country),
           useValue: mockRepository,
         },
-        Logger,
+        {
+          provide: Logger,
+          useValue: mockLogger,
+        },
       ],
     }).compile();
 

@@ -17,6 +17,10 @@ describe('MovieController', () => {
   let movieController: MovieController;
   let movieService: MovieService;
 
+  const mockLogger = {
+    error: jest.fn(),
+  };
+
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [MovieController],
@@ -46,7 +50,10 @@ describe('MovieController', () => {
           provide: TrailerService,
           useValue: {},
         },
-        Logger,
+        {
+          provide: Logger,
+          useValue: mockLogger,
+        },
       ],
     }).compile();
 

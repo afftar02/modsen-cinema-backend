@@ -44,6 +44,10 @@ describe('SeatService', () => {
     findOne: jest.fn(),
   };
 
+  const mockLogger = {
+    error: jest.fn(),
+  };
+
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
@@ -60,7 +64,10 @@ describe('SeatService', () => {
           provide: DataSource,
           useValue: mockDataSource,
         },
-        Logger,
+        {
+          provide: Logger,
+          useValue: mockLogger,
+        },
       ],
     }).compile();
 

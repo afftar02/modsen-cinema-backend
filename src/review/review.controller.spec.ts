@@ -13,6 +13,10 @@ describe('ReviewController', () => {
   let reviewController: ReviewController;
   let reviewService: ReviewService;
 
+  const mockLogger = {
+    error: jest.fn(),
+  };
+
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [ReviewController],
@@ -26,7 +30,10 @@ describe('ReviewController', () => {
           provide: MovieService,
           useValue: {},
         },
-        Logger,
+        {
+          provide: Logger,
+          useValue: mockLogger,
+        },
         {
           provide: DataSource,
           useValue: {},

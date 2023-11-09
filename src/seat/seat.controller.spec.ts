@@ -14,6 +14,10 @@ describe('SeatController', () => {
   let seatController: SeatController;
   let seatService: SeatService;
 
+  const mockLogger = {
+    error: jest.fn(),
+  };
+
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [SeatController],
@@ -31,7 +35,10 @@ describe('SeatController', () => {
           provide: DataSource,
           useValue: {},
         },
-        Logger,
+        {
+          provide: Logger,
+          useValue: mockLogger,
+        },
       ],
     }).compile();
 

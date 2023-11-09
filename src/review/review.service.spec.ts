@@ -43,6 +43,10 @@ describe('ReviewService', () => {
     updateMovieRating: jest.fn(),
   };
 
+  const mockLogger = {
+    error: jest.fn(),
+  };
+
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
@@ -55,7 +59,10 @@ describe('ReviewService', () => {
           provide: MovieService,
           useValue: mockMovieService,
         },
-        Logger,
+        {
+          provide: Logger,
+          useValue: mockLogger,
+        },
         {
           provide: DataSource,
           useValue: mockDataSource,

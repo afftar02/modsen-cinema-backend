@@ -21,6 +21,10 @@ describe('GenreService', () => {
     remove: jest.fn(),
   };
 
+  const mockLogger = {
+    error: jest.fn(),
+  };
+
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
@@ -29,7 +33,10 @@ describe('GenreService', () => {
           provide: getRepositoryToken(Genre),
           useValue: mockRepository,
         },
-        Logger,
+        {
+          provide: Logger,
+          useValue: mockLogger,
+        },
       ],
     }).compile();
 

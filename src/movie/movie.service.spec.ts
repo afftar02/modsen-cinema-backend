@@ -37,6 +37,10 @@ describe('MovieService', () => {
     remove: jest.fn(),
   };
 
+  const mockLogger = {
+    error: jest.fn(),
+  };
+
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
@@ -50,7 +54,6 @@ describe('MovieService', () => {
           provide: getRepositoryToken(Country),
           useClass: Repository,
         },
-        Logger,
         ActorService,
         {
           provide: getRepositoryToken(Actor),
@@ -75,7 +78,10 @@ describe('MovieService', () => {
           provide: PreviewService,
           useValue: mockPreviewService,
         },
-        Logger,
+        {
+          provide: Logger,
+          useValue: mockLogger,
+        },
       ],
     }).compile();
 
