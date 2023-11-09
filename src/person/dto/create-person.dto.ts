@@ -30,5 +30,5 @@ export class CreatePersonDto {
   @IsIn(['MALE', 'FEMALE'], {
     message: 'Gender must be equal to MALE or FEMALE',
   })
-  gender: string;
+  gender?: string;
 }
