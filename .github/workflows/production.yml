@@ -12,6 +12,9 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Use Node.js 18
+      env:
+        JWT_ACCESS_SECRET: ${{ secrets.JWT_ACCESS_SECRET }}
+        JWT_REFRESH_SECRET: ${{ secrets.JWT_REFRESH_SECRET }}
       uses: actions/setup-node@v3
       with:
         node-version: 18
@@ -27,5 +30,3 @@ jobs:
       run: railway up --service modsen-cinema-backend
       env:
         RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
-        JWT_ACCESS_SECRET: ${{ secrets.JWT_ACCESS_SECRET }}
-        JWT_REFRESH_SECRET: ${{ secrets.JWT_REFRESH_SECRET }}
