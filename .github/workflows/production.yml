@@ -27,3 +27,5 @@ jobs:
       run: railway up --service modsen-cinema-backend
       env:
         RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+        JWT_ACCESS_SECRET: ${{ secrets.JWT_ACCESS_SECRET }}
+        JWT_REFRESH_SECRET: ${{ secrets.JWT_REFRESH_SECRET }}
