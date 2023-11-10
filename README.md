@@ -1,30 +1,12 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
-
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
-
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+# Cinema Nest App
 
 ## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+This API provides functionality for booking tickets for different movies in the cinema. API provides CRUD endpoints for actors, country, genres, movies, reviews, seats, sessions and tickets. Also this API has authorization endpoints, including google, facebook and github OAuth. Authorized endpoints include refresh endpoint, avatar image uploading, person and ticket methods. You can upload corresponding files to avatar, poster and trailer endpoints. Trailer endpoint accepts both trailer and its preview image. Movie and ticket endpoints gives you opportunity to choose preferable language from supported languages for get methods. Seat also has an endpoint to generate default seats for session with specified price. This can save your time because you don't need to create all seats individually, but if you want there is also an endpoint for creating seats separately as well.
+
+## Deployed app
+
+https://modsen-cinema.up.railway.app/swagger
 
 ## Installation
 
@@ -58,16 +40,47 @@ $ yarn run test:e2e
 $ yarn run test:cov
 ```
 
-## Support
+## Environment variables
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+```DB_HOST``` - Database host\
+```DB_PORT``` - Database port\
+```DB_USER``` - Database user\
+```DB_PASSWORD``` - Database password\
+```DB_NAME``` - Database name\
+```JWT_ACCESS_SECRET``` - Secret for jwt access token\
+```JWT_REFRESH_SECRET``` - Secret for jwt refresh token\
+```GOOGLE_CLIENT_ID``` - Client id for google oauth service\
+```GOOGLE_CLIENT_SECRET``` - Client secret for google oauth service\
+```GOOGLE_CALLBACK_URL``` - Callback url for google oauth service\
+```FACEBOOK_CLIENT_ID``` - Client id for facebook oauth service\
+```FACEBOOK_CLIENT_SECRET``` - Client secret for facebook oauth service\
+```FACEBOOK_CALLBACK_URL``` - Callback url for facebook oauth service\
+```GITHUB_CLIENT_ID``` - Client id for gitHub oauth service\
+```GITHUB_CLIENT_SECRET``` - Client secret for gitHub oauth service\
+```GITHUB_CALLBACK_URL``` - Callback url for gitHub oauth service\
+```AUTH_SUCCESS_REDIRECT``` - Url for success auth redirect
 
-## Stay in touch
+```
+DB_HOST=YOUR_DB_HOST
+DB_PORT=YOUR_DB_PORT
+DB_USER=YOUR_DB_USER
+DB_PASSWORD=YOUR_DB_PASSWORD
+DB_NAME=YOUR_DB_NAME
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+JWT_ACCESS_SECRET=YOUR_JWT_ACCESS_TOKEN_SECRET
+JWT_REFRESH_SECRET=YOUR_JWT_REFRESH_TOKEN_SECRET
 
-## License
+GOOGLE_CLIENT_ID=YOUR_GOOGLE_CLIENT_ID
+GOOGLE_CLIENT_SECRET=YOUR_GOOGLE_CLIENT_SECRET
+GOOGLE_CALLBACK_URL=YOUR_GOOGLE_CALLBACK_URL
 
-Nest is [MIT licensed](LICENSE).
+FACEBOOK_CLIENT_ID=YOUR_FACEBOOK_CLIENT_ID
+FACEBOOK_CLIENT_SECRET=YOUR_FACEBOOK_CLIENT_SECRET
+FACEBOOK_CALLBACK_URL=YOUR_FACEBOOK_CALLBACK_URL
+
+GITHUB_CLIENT_ID=YOUR_GITHUB_CLIENT_ID
+GITHUB_CLIENT_SECRET=YOUR_GITHUB_CLIENT_SECRET
+GITHUB_CALLBACK_URL=YOUR_GITHUB_CALLBACK_URL
+
+AUTH_SUCCESS_REDIRECT=YOUR_AUTH_SUCCESS_REDIRECT_URL
+```
