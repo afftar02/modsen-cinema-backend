@@ -2,8 +2,6 @@ FROM node:18-alpine
 
 WORKDIR /app
 
-VOLUME ./uploads
-
 COPY package*.json ./
 
 RUN npm install
