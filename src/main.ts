@@ -7,6 +7,7 @@ import initializePipes from './shared/common/helpers/initializePipes';
 import initializeSwagger from './shared/common/helpers/initializeSwagger';
 import { ConfigService } from '@nestjs/config';
 import { AllExceptionsFilter } from './shared/common/filters/all-exceptions.filter';
+import { OrmExceptionFilter } from './shared/common/filters/orm-exception.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
@@ -21,7 +22,10 @@ async function bootstrap() {
   initializeSwagger(app);
 
   const { httpAdapter } = app.get(HttpAdapterHost);
-  app.useGlobalFilters(new AllExceptionsFilter(httpAdapter));
+  app.useGlobalFilters(
+    new AllExceptionsFilter(httpAdapter),
+    new OrmExceptionFilter(),
+  );
 
   const configService = app.get(ConfigService);
   const port = configService.get<string>('PORT');
