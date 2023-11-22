@@ -10,8 +10,8 @@ import {
 import { PosterService } from './poster.service';
 import { ApiBody, ApiConsumes, ApiTags } from '@nestjs/swagger';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { fileStorage } from '../storage';
-import { IMAGE_EXT, IMAGE_SIZE_LIMIT } from '../constants';
+import { fileStorage } from '../shared/common/storage';
+import { IMAGE_EXT, IMAGE_SIZE_LIMIT } from '../shared/common/constants';
 
 @Controller('poster')
 @ApiTags('Poster')

@@ -16,8 +16,8 @@ import { AvatarModule } from './avatar/avatar.module';
 import { AuthModule } from './auth/auth.module';
 import { TokenModule } from './token/token.module';
 import { PreviewModule } from './preview/preview.module';
-import typeorm from './config/typeorm';
-import envSchema from './config/envSchema';
+import typeorm from './shared/common/config/typeorm';
+import envSchema from './shared/common/config/envSchema';
 
 @Module({
   imports: [

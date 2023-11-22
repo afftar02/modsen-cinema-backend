@@ -11,10 +11,10 @@ import {
 import { AvatarService } from './avatar.service';
 import { ApiBearerAuth, ApiBody, ApiConsumes, ApiTags } from '@nestjs/swagger';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { fileStorage } from '../storage';
-import { IMAGE_EXT, IMAGE_SIZE_LIMIT } from '../constants';
+import { fileStorage } from '../shared/common/storage';
+import { IMAGE_EXT, IMAGE_SIZE_LIMIT } from '../shared/common/constants';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
-import { UserId } from '../decorators/user-id.decorator';
+import { UserId } from '../shared/common/decorators/user-id.decorator';
 
 @Controller('avatar')
 @ApiTags('Avatar')

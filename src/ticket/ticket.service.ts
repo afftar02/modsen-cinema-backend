@@ -12,7 +12,7 @@ import { Ticket } from './entities/ticket.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { SeatService } from '../seat/seat.service';
 import { FindMovieDto } from '../movie/dto/find-movie.dto';
-import { LANGUAGES } from '../constants';
+import { LANGUAGES } from '../shared/common/constants';
 
 @Injectable()
 export class TicketService {

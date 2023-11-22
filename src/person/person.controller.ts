@@ -10,7 +10,7 @@ import { PersonService } from './person.service';
 import { UpdatePersonDto } from './dto/update-person.dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
-import { UserId } from '../decorators/user-id.decorator';
+import { UserId } from '../shared/common/decorators/user-id.decorator';
 
 @Controller('person')
 @ApiTags('Person')
