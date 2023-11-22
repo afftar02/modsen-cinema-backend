@@ -1,4 +1,4 @@
-import { NestFactory } from '@nestjs/core';
+import { HttpAdapterHost, NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import * as express from 'express';
 import { WinstonModule } from 'nest-winston';
@@ -6,6 +6,7 @@ import { instance } from '../logger/winston.logger';
 import initializePipes from './shared/common/helpers/initializePipes';
 import initializeSwagger from './shared/common/helpers/initializeSwagger';
 import { ConfigService } from '@nestjs/config';
+import { AllExceptionsFilter } from './shared/common/filters/all-exceptions.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
@@ -18,6 +19,9 @@ async function bootstrap() {
   initializePipes(app);
   app.use('/uploads', express.static('uploads'));
   initializeSwagger(app);
+
+  const { httpAdapter } = app.get(HttpAdapterHost);
+  app.useGlobalFilters(new AllExceptionsFilter(httpAdapter));
 
   const configService = app.get(ConfigService);
   const port = configService.get<string>('PORT');
