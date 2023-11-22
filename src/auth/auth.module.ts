@@ -11,9 +11,16 @@ import { RefreshStrategy } from './strategies/refresh.strategy';
 import { GoogleStrategy } from './strategies/google.strategy';
 import { FacebookStrategy } from './strategies/facebook.strategy';
 import { GithubStrategy } from './strategies/github.strategy';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
-  imports: [PersonModule, PassportModule, TokenModule, JwtModule.register({})],
+  imports: [
+    PersonModule,
+    PassportModule,
+    TokenModule,
+    JwtModule.register({}),
+    ConfigModule,
+  ],
   controllers: [AuthController],
   providers: [
     AuthService,

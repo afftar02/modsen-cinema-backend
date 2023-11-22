@@ -18,11 +18,15 @@ import { RefreshGuard } from './guards/refresh.guard';
 import { GoogleOauthGuard } from './guards/google-oauth.guard';
 import { FacebookOauthGuard } from './guards/facebook-oauth.guard';
 import { GithubOauthGuard } from './guards/github-oauth.guard';
+import { ConfigService } from '@nestjs/config';
 
 @Controller('auth')
 @ApiTags('Auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly authService: AuthService,
+    private configService: ConfigService,
+  ) {}
 
   @UseGuards(LocalAuthGuard)
   @Post('login')
@@ -53,7 +57,7 @@ export class AuthController {
     const tokens = await this.authService.thirdPartyAuth(req.user);
 
     return res.redirect(
-      process.env.AUTH_SUCCESS_REDIRECT +
+      this.configService.get<string>('AUTH_SUCCESS_REDIRECT') +
         `?accessToken=${tokens.access_token}&refreshToken=${tokens.refresh_token}`,
     );
   }
@@ -68,7 +72,7 @@ export class AuthController {
     const tokens = await this.authService.thirdPartyAuth(req.user);
 
     return res.redirect(
-      process.env.AUTH_SUCCESS_REDIRECT +
+      this.configService.get<string>('AUTH_SUCCESS_REDIRECT') +
         `?accessToken=${tokens.access_token}&refreshToken=${tokens.refresh_token}`,
     );
   }
@@ -83,7 +87,7 @@ export class AuthController {
     const tokens = await this.authService.thirdPartyAuth(req.user);
 
     return res.redirect(
-      process.env.AUTH_SUCCESS_REDIRECT +
+      this.configService.get<string>('AUTH_SUCCESS_REDIRECT') +
         `?accessToken=${tokens.access_token}&refreshToken=${tokens.refresh_token}`,
     );
   }

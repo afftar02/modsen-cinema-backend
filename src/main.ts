@@ -5,6 +5,7 @@ import { WinstonModule } from 'nest-winston';
 import { instance } from '../logger/winston.logger';
 import initializePipes from './shared/common/helpers/initializePipes';
 import initializeSwagger from './shared/common/helpers/initializeSwagger';
+import { ConfigService } from '@nestjs/config';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
@@ -18,6 +19,9 @@ async function bootstrap() {
   app.use('/uploads', express.static('uploads'));
   initializeSwagger(app);
 
-  await app.listen(process.env.PORT || 8080);
+  const configService = app.get(ConfigService);
+  const port = configService.get<string>('PORT');
+
+  await app.listen(port || 8080);
 }
 bootstrap();

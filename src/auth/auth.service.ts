@@ -5,6 +5,7 @@ import { Person } from '../person/entities/person.entity';
 import { CreatePersonDto } from '../person/dto/create-person.dto';
 import { TokenService } from '../token/token.service';
 import * as bcrypt from 'bcrypt';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class AuthService {
@@ -12,6 +13,7 @@ export class AuthService {
     private personService: PersonService,
     private jwtService: JwtService,
     private tokenService: TokenService,
+    private configService: ConfigService,
   ) {}
 
   async validateUser(email: string, password: string): Promise<any> {
@@ -37,7 +39,7 @@ export class AuthService {
 
     try {
       this.jwtService.verify(currentRefreshToken.value, {
-        secret: process.env.JWT_REFRESH_SECRET,
+        secret: this.configService.get<string>('JWT_REFRESH_SECRET'),
       });
 
       tokens.refresh_token = currentRefreshToken.value;
@@ -80,11 +82,11 @@ export class AuthService {
 
     return {
       access_token: this.jwtService.sign(payload, {
-        secret: process.env.JWT_ACCESS_SECRET,
+        secret: this.configService.get<string>('JWT_ACCESS_SECRET'),
         expiresIn: '7d',
       }),
       refresh_token: this.jwtService.sign(payload, {
-        secret: process.env.JWT_REFRESH_SECRET,
+        secret: this.configService.get<string>('JWT_REFRESH_SECRET'),
         expiresIn: '30d',
       }),
     };
