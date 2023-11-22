@@ -42,6 +42,7 @@ $ yarn run test:cov
 
 ## Environment variables
 
+```PORT``` - Port that app is listening to(8080 by default)\
 ```DB_HOST``` - Database host\
 ```DB_PORT``` - Database port\
 ```DB_USER``` - Database user\
@@ -61,6 +62,8 @@ $ yarn run test:cov
 ```AUTH_SUCCESS_REDIRECT``` - Url for success auth redirect
 
 ```
+PORT=YOUR_PORT
+
 DB_HOST=YOUR_DB_HOST
 DB_PORT=YOUR_DB_PORT
 DB_USER=YOUR_DB_USER
