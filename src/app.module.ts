@@ -17,12 +17,14 @@ import { AuthModule } from './auth/auth.module';
 import { TokenModule } from './token/token.module';
 import { PreviewModule } from './preview/preview.module';
 import typeorm from './config/typeorm';
+import envSchema from './config/envSchema';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
       load: [typeorm],
+      validationSchema: envSchema,
     }),
     TypeOrmModule.forRootAsync({
       inject: [ConfigService],
