@@ -1,8 +1,7 @@
 import { Injectable, Logger, NotFoundException } from '@nestjs/common';
-import { CreateReviewDto } from './dto/create-review.dto';
-import { UpdateReviewDto } from './dto/update-review.dto';
+import { CreateReviewDto, UpdateReviewDto } from './dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Review } from './entities/review.entity';
+import { Review } from './entities';
 import { DataSource, Repository } from 'typeorm';
 import { MovieService } from '../movie/movie.service';
 

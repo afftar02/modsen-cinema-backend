@@ -8,10 +8,9 @@ import {
   Delete,
 } from '@nestjs/common';
 import { MovieService } from './movie.service';
-import { CreateMovieDto } from './dto/create-movie.dto';
-import { UpdateMovieDto } from './dto/update-movie.dto';
+import { CreateMovieDto, UpdateMovieDto } from './dto';
 import { ApiTags } from '@nestjs/swagger';
-import { LanguageValidationPipe } from '../../shared/common/pipes/language-validation.pipe';
+import { LanguageValidationPipe } from '../../shared/common/pipes';
 
 @Controller()
 @ApiTags('Movie')

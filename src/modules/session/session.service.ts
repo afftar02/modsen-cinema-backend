@@ -5,13 +5,12 @@ import {
   Logger,
   NotFoundException,
 } from '@nestjs/common';
-import { CreateSessionDto } from './dto/create-session.dto';
-import { UpdateSessionDto } from './dto/update-session.dto';
+import { CreateSessionDto, UpdateSessionDto } from './dto';
 import { Repository } from 'typeorm';
-import { Session } from './entities/session.entity';
+import { Session } from './entities';
 import { InjectRepository } from '@nestjs/typeorm';
 import { MovieService } from '../movie/movie.service';
-import { Movie } from '../movie/entities/movie.entity';
+import { Movie } from '../movie/entities';
 
 @Injectable()
 export class SessionService {

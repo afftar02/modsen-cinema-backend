@@ -1,12 +1,11 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { ReviewService } from './review.service';
-import { CreateReviewDto } from './dto/create-review.dto';
-import { UpdateReviewDto } from './dto/update-review.dto';
+import { CreateReviewDto, UpdateReviewDto } from './dto';
 import { Logger, NotFoundException } from '@nestjs/common';
-import { Review } from './entities/review.entity';
+import { Review } from './entities';
 import { MovieService } from '../movie/movie.service';
 import { DataSource, Repository } from 'typeorm';
-import { Movie } from '../movie/entities/movie.entity';
+import { Movie } from '../movie/entities';
 import { getRepositoryToken } from '@nestjs/typeorm';
 
 describe('ReviewService', () => {

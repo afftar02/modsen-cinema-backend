@@ -8,7 +8,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import * as fs from 'fs';
 import { FILES_PATH } from '../../shared/common/constants';
-import { Trailer } from './entities/trailer.entity';
+import { Trailer } from './entities';
 import { PreviewService } from '../preview/preview.service';
 
 @Injectable()

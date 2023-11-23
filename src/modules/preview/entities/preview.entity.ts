@@ -1,5 +1,5 @@
 import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { Trailer } from '../../trailer/entities/trailer.entity';
+import { Trailer } from '../../trailer/entities';
 
 @Entity('preview')
 export class Preview {

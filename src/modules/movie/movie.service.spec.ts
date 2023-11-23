@@ -3,19 +3,18 @@ import { MovieService } from './movie.service';
 import { QueryRunner, Repository } from 'typeorm';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Logger, NotFoundException } from '@nestjs/common';
-import { CreateMovieDto } from './dto/create-movie.dto';
-import { UpdateMovieDto } from './dto/update-movie.dto';
-import { Movie } from './entities/movie.entity';
+import { CreateMovieDto, UpdateMovieDto } from './dto';
+import { Movie } from './entities';
 import { CountryService } from '../country/country.service';
 import { ActorService } from '../actor/actor.service';
 import { GenreService } from '../genre/genre.service';
 import { PosterService } from '../poster/poster.service';
 import { TrailerService } from '../trailer/trailer.service';
-import { Country } from '../country/entities/country.entity';
-import { Actor } from '../actor/entities/actor.entity';
-import { Genre } from '../genre/entities/genre.entity';
-import { Poster } from '../poster/entities/poster.entity';
-import { Trailer } from '../trailer/entities/trailer.entity';
+import { Country } from '../country/entities';
+import { Actor } from '../actor/entities';
+import { Genre } from '../genre/entities';
+import { Poster } from '../poster/entities';
+import { Trailer } from '../trailer/entities';
 import { PreviewService } from '../preview/preview.service';
 
 describe('MovieService', () => {

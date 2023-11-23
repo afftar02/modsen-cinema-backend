@@ -9,8 +9,7 @@ import {
   Query,
 } from '@nestjs/common';
 import { SeatService } from './seat.service';
-import { CreateSeatDto } from './dto/create-seat.dto';
-import { UpdateSeatDto } from './dto/update-seat.dto';
+import { CreateSeatDto, UpdateSeatDto } from './dto';
 import { ApiQuery, ApiTags } from '@nestjs/swagger';
 
 @Controller()

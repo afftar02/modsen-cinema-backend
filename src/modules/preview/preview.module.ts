@@ -1,7 +1,7 @@
 import { Logger, Module } from '@nestjs/common';
 import { PreviewService } from './preview.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Preview } from './entities/preview.entity';
+import { Preview } from './entities';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Preview])],

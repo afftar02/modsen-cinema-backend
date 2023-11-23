@@ -9,12 +9,11 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { TicketService } from './ticket.service';
-import { CreateTicketDto } from './dto/create-ticket.dto';
-import { UpdateTicketDto } from './dto/update-ticket.dto';
+import { CreateTicketDto, UpdateTicketDto } from './dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
-import { UserId } from '../../shared/common/decorators/user-id.decorator';
-import { LanguageValidationPipe } from '../../shared/common/pipes/language-validation.pipe';
+import { JwtAuthGuard } from '../auth/guards';
+import { UserId } from '../../shared/common/decorators';
+import { LanguageValidationPipe } from '../../shared/common/pipes';
 
 @Controller()
 @ApiTags('Ticket')

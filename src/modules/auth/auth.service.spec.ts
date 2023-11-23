@@ -3,13 +3,13 @@ import { AuthService } from './auth.service';
 import { PersonService } from '../person/person.service';
 import { JwtService } from '@nestjs/jwt';
 import { TokenService } from '../token/token.service';
-import { CreatePersonDto } from '../person/dto/create-person.dto';
-import { Person } from '../person/entities/person.entity';
+import { CreatePersonDto } from '../person/dto';
+import { Person } from '../person/entities';
 import * as bcrypt from 'bcrypt';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { ForbiddenException, Logger } from '@nestjs/common';
 import { AvatarService } from '../avatar/avatar.service';
-import { Token } from '../token/entities/token.entity';
+import { Token } from '../token/entities';
 import * as dotenv from 'dotenv';
 import { ConfigService } from '@nestjs/config';
 

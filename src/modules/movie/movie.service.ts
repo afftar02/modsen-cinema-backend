@@ -1,15 +1,13 @@
 import { Injectable, Logger, NotFoundException } from '@nestjs/common';
-import { CreateMovieDto } from './dto/create-movie.dto';
-import { UpdateMovieDto } from './dto/update-movie.dto';
+import { CreateMovieDto, UpdateMovieDto, FindMovieDto } from './dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { QueryRunner, Repository } from 'typeorm';
-import { Movie } from './entities/movie.entity';
+import { Movie } from './entities';
 import { CountryService } from '../country/country.service';
 import { ActorService } from '../actor/actor.service';
 import { GenreService } from '../genre/genre.service';
 import { PosterService } from '../poster/poster.service';
 import { TrailerService } from '../trailer/trailer.service';
-import { FindMovieDto } from './dto/find-movie.dto';
 
 @Injectable()
 export class MovieService {

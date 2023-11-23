@@ -2,7 +2,7 @@ import { Logger, Module } from '@nestjs/common';
 import { SeatService } from './seat.service';
 import { SeatController } from './seat.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Seat } from './entities/seat.entity';
+import { Seat } from './entities';
 import { SessionModule } from '../session/session.module';
 
 @Module({

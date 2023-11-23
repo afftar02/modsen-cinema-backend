@@ -1,10 +1,9 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { SessionController } from './session.controller';
 import { SessionService } from './session.service';
-import { CreateSessionDto } from './dto/create-session.dto';
-import { UpdateSessionDto } from './dto/update-session.dto';
-import { Session } from './entities/session.entity';
-import { Movie } from '../movie/entities/movie.entity';
+import { CreateSessionDto, UpdateSessionDto } from './dto';
+import { Session } from './entities';
+import { Movie } from '../movie/entities';
 
 describe('SessionController', () => {
   let sessionController: SessionController;

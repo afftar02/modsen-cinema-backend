@@ -11,13 +11,15 @@ import {
 import { Response } from 'express';
 import { AuthService } from './auth.service';
 import { ApiBearerAuth, ApiBody, ApiTags } from '@nestjs/swagger';
-import { LocalAuthGuard } from './guards/local-auth.guard';
-import { LoginDto } from './dto/login.dto';
-import { CreatePersonDto } from '../person/dto/create-person.dto';
-import { RefreshGuard } from './guards/refresh.guard';
-import { GoogleOauthGuard } from './guards/google-oauth.guard';
-import { FacebookOauthGuard } from './guards/facebook-oauth.guard';
-import { GithubOauthGuard } from './guards/github-oauth.guard';
+import {
+  LocalAuthGuard,
+  RefreshGuard,
+  GoogleOauthGuard,
+  FacebookOauthGuard,
+  GithubOauthGuard,
+} from './guards';
+import { LoginDto } from './dto';
+import { CreatePersonDto } from '../person/dto';
 import { ConfigService } from '@nestjs/config';
 
 @Controller('auth')

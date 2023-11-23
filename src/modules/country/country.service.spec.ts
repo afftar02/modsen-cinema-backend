@@ -3,9 +3,8 @@ import { CountryService } from './country.service';
 import { Repository } from 'typeorm';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Logger, NotFoundException, BadRequestException } from '@nestjs/common';
-import { CreateCountryDto } from './dto/create-country.dto';
-import { UpdateCountryDto } from './dto/update-country.dto';
-import { Country } from './entities/country.entity';
+import { CreateCountryDto, UpdateCountryDto } from './dto';
+import { Country } from './entities';
 
 describe('CountryService', () => {
   let countryService: CountryService;

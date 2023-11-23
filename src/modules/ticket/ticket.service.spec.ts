@@ -1,8 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { TicketService } from './ticket.service';
-import { CreateTicketDto } from './dto/create-ticket.dto';
-import { UpdateTicketDto } from './dto/update-ticket.dto';
-import { Ticket } from './entities/ticket.entity';
+import { CreateTicketDto, UpdateTicketDto } from './dto';
+import { Ticket } from './entities';
 import { SeatService } from '../seat/seat.service';
 import {
   Logger,
@@ -11,8 +10,8 @@ import {
   ForbiddenException,
 } from '@nestjs/common';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { Session } from '../session/entities/session.entity';
-import { Seat } from '../seat/entities/seat.entity';
+import { Session } from '../session/entities';
+import { Seat } from '../seat/entities';
 
 describe('TicketService', () => {
   let ticketService: TicketService;

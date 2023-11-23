@@ -5,13 +5,12 @@ import {
   Logger,
   NotFoundException,
 } from '@nestjs/common';
-import { CreateTicketDto } from './dto/create-ticket.dto';
-import { UpdateTicketDto } from './dto/update-ticket.dto';
+import { CreateTicketDto, UpdateTicketDto } from './dto';
 import { Repository } from 'typeorm';
-import { Ticket } from './entities/ticket.entity';
+import { Ticket } from './entities';
 import { InjectRepository } from '@nestjs/typeorm';
 import { SeatService } from '../seat/seat.service';
-import { FindMovieDto } from '../movie/dto/find-movie.dto';
+import { FindMovieDto } from '../movie/dto';
 import { LANGUAGES } from '../../shared/common/constants';
 
 @Injectable()

@@ -4,11 +4,10 @@ import {
   Logger,
   NotFoundException,
 } from '@nestjs/common';
-import { CreateGenreDto } from './dto/create-genre.dto';
-import { UpdateGenreDto } from './dto/update-genre.dto';
+import { CreateGenreDto, UpdateGenreDto } from './dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { In, Repository } from 'typeorm';
-import { Genre } from './entities/genre.entity';
+import { Genre } from './entities';
 
 @Injectable()
 export class GenreService {

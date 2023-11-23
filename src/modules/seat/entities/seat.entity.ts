@@ -1,6 +1,6 @@
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { Session } from '../../session/entities/session.entity';
-import { Ticket } from '../../ticket/entities/ticket.entity';
+import { Session } from '../../session/entities';
+import { Ticket } from '../../ticket/entities';
 
 @Entity('seat')
 export class Seat {

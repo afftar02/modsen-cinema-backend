@@ -2,7 +2,7 @@ import { Logger, Module } from '@nestjs/common';
 import { MovieService } from './movie.service';
 import { MovieController } from './movie.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Movie } from './entities/movie.entity';
+import { Movie } from './entities';
 import { CountryModule } from '../country/country.module';
 import { ActorModule } from '../actor/actor.module';
 import { GenreModule } from '../genre/genre.module';

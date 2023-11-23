@@ -3,11 +3,11 @@ import { AppModule } from './app.module';
 import * as express from 'express';
 import { WinstonModule } from 'nest-winston';
 import { instance } from '../logger/winston.logger';
-import initializePipes from './shared/common/helpers/initializePipes';
-import initializeSwagger from './shared/common/helpers/initializeSwagger';
+import { initializePipes } from './shared/common/helpers';
+import { initializeSwagger } from './shared/common/helpers';
 import { ConfigService } from '@nestjs/config';
-import { AllExceptionsFilter } from './shared/common/filters/all-exceptions.filter';
-import { OrmExceptionFilter } from './shared/common/filters/orm-exception.filter';
+import { AllExceptionsFilter } from './shared/common/filters';
+import { OrmExceptionFilter } from './shared/common/filters';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {

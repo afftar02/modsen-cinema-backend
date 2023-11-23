@@ -5,10 +5,9 @@ import {
   Logger,
   NotFoundException,
 } from '@nestjs/common';
-import { CreateSeatDto } from './dto/create-seat.dto';
-import { UpdateSeatDto } from './dto/update-seat.dto';
+import { CreateSeatDto, UpdateSeatDto } from './dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Seat } from './entities/seat.entity';
+import { Seat } from './entities';
 import { DataSource, In, QueryRunner, Repository } from 'typeorm';
 import { SessionService } from '../session/session.service';
 

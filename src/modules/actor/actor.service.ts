@@ -4,11 +4,10 @@ import {
   Logger,
   NotFoundException,
 } from '@nestjs/common';
-import { CreateActorDto } from './dto/create-actor.dto';
-import { UpdateActorDto } from './dto/update-actor.dto';
+import { CreateActorDto, UpdateActorDto } from './dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { In, Repository } from 'typeorm';
-import { Actor } from './entities/actor.entity';
+import { Actor } from './entities';
 
 @Injectable()
 export class ActorService {

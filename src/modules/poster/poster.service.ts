@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Poster } from './entities/poster.entity';
+import { Poster } from './entities';
 import * as fs from 'fs';
 import { FILES_PATH } from '../../shared/common/constants';
 

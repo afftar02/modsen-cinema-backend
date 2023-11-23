@@ -1,11 +1,10 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { GenreController } from './genre.controller';
 import { GenreService } from './genre.service';
-import { CreateGenreDto } from './dto/create-genre.dto';
-import { UpdateGenreDto } from './dto/update-genre.dto';
+import { CreateGenreDto, UpdateGenreDto } from './dto';
 import { Logger, NotFoundException } from '@nestjs/common';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { Genre } from './entities/genre.entity';
+import { Genre } from './entities';
 import { Repository } from 'typeorm';
 
 describe('GenreController', () => {

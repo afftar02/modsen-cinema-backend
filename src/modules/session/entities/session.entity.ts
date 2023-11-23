@@ -5,8 +5,8 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { Movie } from '../../movie/entities/movie.entity';
-import { Seat } from '../../seat/entities/seat.entity';
+import { Movie } from '../../movie/entities';
+import { Seat } from '../../seat/entities';
 
 @Entity('session')
 export class Session {

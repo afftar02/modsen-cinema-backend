@@ -1,8 +1,8 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
 import { PersonService } from '../person/person.service';
 import { JwtService } from '@nestjs/jwt';
-import { Person } from '../person/entities/person.entity';
-import { CreatePersonDto } from '../person/dto/create-person.dto';
+import { Person } from '../person/entities';
+import { CreatePersonDto } from '../person/dto';
 import { TokenService } from '../token/token.service';
 import * as bcrypt from 'bcrypt';
 import { ConfigService } from '@nestjs/config';

@@ -1,10 +1,9 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { ActorController } from './actor.controller';
 import { ActorService } from './actor.service';
-import { CreateActorDto } from './dto/create-actor.dto';
-import { UpdateActorDto } from './dto/update-actor.dto';
+import { CreateActorDto, UpdateActorDto } from './dto';
 import { Logger, NotFoundException } from '@nestjs/common';
-import { Actor } from './entities/actor.entity';
+import { Actor } from './entities';
 import { getRepositoryToken } from '@nestjs/typeorm';
 
 describe('ActorController', () => {

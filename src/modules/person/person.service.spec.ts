@@ -1,13 +1,12 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { PersonService } from './person.service';
-import { CreatePersonDto } from './dto/create-person.dto';
-import { UpdatePersonDto } from './dto/update-person.dto';
-import { Person } from './entities/person.entity';
+import { CreatePersonDto, UpdatePersonDto } from './dto';
+import { Person } from './entities';
 import { AvatarService } from '../avatar/avatar.service';
 import { NotFoundException, ConflictException, Logger } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { Avatar } from '../avatar/entities/avatar.entity';
+import { Avatar } from '../avatar/entities';
 
 describe('PersonService', () => {
   let personService: PersonService;

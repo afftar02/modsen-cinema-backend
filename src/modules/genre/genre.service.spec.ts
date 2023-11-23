@@ -3,9 +3,8 @@ import { GenreService } from './genre.service';
 import { Repository } from 'typeorm';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Logger, NotFoundException, BadRequestException } from '@nestjs/common';
-import { CreateGenreDto } from './dto/create-genre.dto';
-import { UpdateGenreDto } from './dto/update-genre.dto';
-import { Genre } from './entities/genre.entity';
+import { CreateGenreDto, UpdateGenreDto } from './dto';
+import { Genre } from './entities';
 
 describe('GenreService', () => {
   let genreService: GenreService;

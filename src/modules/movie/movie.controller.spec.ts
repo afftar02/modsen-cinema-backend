@@ -1,12 +1,11 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { MovieController } from './movie.controller';
 import { MovieService } from './movie.service';
-import { CreateMovieDto } from './dto/create-movie.dto';
-import { UpdateMovieDto } from './dto/update-movie.dto';
+import { CreateMovieDto, UpdateMovieDto } from './dto';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { BadRequestException, Logger } from '@nestjs/common';
 import { Repository } from 'typeorm';
-import { Movie } from './entities/movie.entity';
+import { Movie } from './entities';
 import { CountryService } from '../country/country.service';
 import { ActorService } from '../actor/actor.service';
 import { GenreService } from '../genre/genre.service';

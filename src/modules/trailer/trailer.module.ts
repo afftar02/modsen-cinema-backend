@@ -2,7 +2,7 @@ import { Logger, Module } from '@nestjs/common';
 import { TrailerService } from './trailer.service';
 import { TrailerController } from './trailer.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Trailer } from './entities/trailer.entity';
+import { Trailer } from './entities';
 import { PreviewModule } from '../preview/preview.module';
 
 @Module({

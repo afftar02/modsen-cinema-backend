@@ -1,14 +1,13 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { SeatController } from './seat.controller';
 import { SeatService } from './seat.service';
-import { CreateSeatDto } from './dto/create-seat.dto';
-import { UpdateSeatDto } from './dto/update-seat.dto';
+import { CreateSeatDto, UpdateSeatDto } from './dto';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { Seat } from './entities/seat.entity';
+import { Seat } from './entities';
 import { DataSource, Repository } from 'typeorm';
 import { SessionService } from '../session/session.service';
 import { Logger } from '@nestjs/common';
-import { Session } from '../session/entities/session.entity';
+import { Session } from '../session/entities';
 
 describe('SeatController', () => {
   let seatController: SeatController;

@@ -8,8 +8,7 @@ import {
   Delete,
 } from '@nestjs/common';
 import { ActorService } from './actor.service';
-import { CreateActorDto } from './dto/create-actor.dto';
-import { UpdateActorDto } from './dto/update-actor.dto';
+import { CreateActorDto, UpdateActorDto } from './dto';
 import { ApiTags } from '@nestjs/swagger';
 
 @Controller()

@@ -4,10 +4,9 @@ import {
   Logger,
   NotFoundException,
 } from '@nestjs/common';
-import { CreatePersonDto } from './dto/create-person.dto';
-import { UpdatePersonDto } from './dto/update-person.dto';
+import { CreatePersonDto, UpdatePersonDto } from './dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Person } from './entities/person.entity';
+import { Person } from './entities';
 import { Repository } from 'typeorm';
 import { AvatarService } from '../avatar/avatar.service';
 import * as bcrypt from 'bcrypt';

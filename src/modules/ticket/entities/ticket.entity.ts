@@ -5,8 +5,8 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { Seat } from '../../seat/entities/seat.entity';
-import { Person } from '../../person/entities/person.entity';
+import { Seat } from '../../seat/entities';
+import { Person } from '../../person/entities';
 
 @Entity('ticket')
 export class Ticket {

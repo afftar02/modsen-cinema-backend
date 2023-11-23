@@ -1,10 +1,9 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { ReviewController } from './review.controller';
 import { ReviewService } from './review.service';
-import { CreateReviewDto } from './dto/create-review.dto';
-import { UpdateReviewDto } from './dto/update-review.dto';
+import { CreateReviewDto, UpdateReviewDto } from './dto';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { Review } from './entities/review.entity';
+import { Review } from './entities';
 import { DataSource, Repository } from 'typeorm';
 import { MovieService } from '../movie/movie.service';
 import { Logger } from '@nestjs/common';

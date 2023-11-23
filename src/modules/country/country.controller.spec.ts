@@ -1,11 +1,10 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { CountryController } from './country.controller';
 import { CountryService } from './country.service';
-import { CreateCountryDto } from './dto/create-country.dto';
-import { UpdateCountryDto } from './dto/update-country.dto';
+import { CreateCountryDto, UpdateCountryDto } from './dto';
 import { Logger, NotFoundException } from '@nestjs/common';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { Country } from './entities/country.entity';
+import { Country } from './entities';
 
 describe('CountryController', () => {
   let countryController: CountryController;

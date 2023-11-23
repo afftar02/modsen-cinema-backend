@@ -5,7 +5,7 @@ import {
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { Person } from '../../person/entities/person.entity';
+import { Person } from '../../person/entities';
 
 @Entity('token')
 export class Token {

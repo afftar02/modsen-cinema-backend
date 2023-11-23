@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { TokenService } from './token.service';
-import { Token } from './entities/token.entity';
+import { Token } from './entities';
 import { getRepositoryToken } from '@nestjs/typeorm';
 
 describe('TokenService', () => {

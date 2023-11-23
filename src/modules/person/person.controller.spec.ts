@@ -1,13 +1,13 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { PersonController } from './person.controller';
 import { PersonService } from './person.service';
-import { UpdatePersonDto } from './dto/update-person.dto';
+import { UpdatePersonDto } from './dto';
 import { Logger } from '@nestjs/common';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { Person } from './entities/person.entity';
+import { Person } from './entities';
 import { Repository } from 'typeorm';
 import { AvatarService } from '../avatar/avatar.service';
-import { Avatar } from '../avatar/entities/avatar.entity';
+import { Avatar } from '../avatar/entities';
 
 describe('PersonController', () => {
   let personController: PersonController;

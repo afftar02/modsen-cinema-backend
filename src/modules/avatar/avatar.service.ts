@@ -6,7 +6,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Avatar } from './entities/avatar.entity';
+import { Avatar } from './entities';
 import { Repository } from 'typeorm';
 import * as fs from 'fs';
 import { FILES_PATH } from '../../shared/common/constants';

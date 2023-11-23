@@ -1,13 +1,13 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
-import { CreatePersonDto } from '../person/dto/create-person.dto';
+import { CreatePersonDto } from '../person/dto';
 import { ForbiddenException } from '@nestjs/common';
 import { PersonService } from '../person/person.service';
 import { JwtService } from '@nestjs/jwt';
 import { TokenService } from '../token/token.service';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { Token } from '../token/entities/token.entity';
+import { Token } from '../token/entities';
 import { ConfigService } from '@nestjs/config';
 
 describe('AuthController', () => {

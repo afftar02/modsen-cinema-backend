@@ -1,10 +1,10 @@
-import { Review } from 'src/modules/review/entities/review.entity';
-import { Country } from 'src/modules/country/entities/country.entity';
-import { Actor } from 'src/modules/actor/entities/actor.entity';
-import { Genre } from 'src/modules/genre/entities/genre.entity';
-import { Poster } from 'src/modules/poster/entities/poster.entity';
-import { Trailer } from 'src/modules/trailer/entities/trailer.entity';
-import { Movie } from '../entities/movie.entity';
+import { Review } from 'src/modules/review/entities';
+import { Country } from 'src/modules/country/entities';
+import { Actor } from 'src/modules/actor/entities';
+import { Genre } from 'src/modules/genre/entities';
+import { Poster } from 'src/modules/poster/entities';
+import { Trailer } from 'src/modules/trailer/entities';
+import { Movie } from '../entities';
 
 export class FindMovieDto {
   constructor(movie: Movie, language: string) {

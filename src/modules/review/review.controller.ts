@@ -8,8 +8,7 @@ import {
   Delete,
 } from '@nestjs/common';
 import { ReviewService } from './review.service';
-import { CreateReviewDto } from './dto/create-review.dto';
-import { UpdateReviewDto } from './dto/update-review.dto';
+import { CreateReviewDto, UpdateReviewDto } from './dto';
 import { ApiTags } from '@nestjs/swagger';
 
 @Controller()

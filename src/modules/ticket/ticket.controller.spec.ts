@@ -1,8 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { TicketController } from './ticket.controller';
 import { TicketService } from './ticket.service';
-import { CreateTicketDto } from './dto/create-ticket.dto';
-import { UpdateTicketDto } from './dto/update-ticket.dto';
+import { CreateTicketDto, UpdateTicketDto } from './dto';
 import { NotFoundException, ForbiddenException } from '@nestjs/common';
 
 describe('TicketController', () => {

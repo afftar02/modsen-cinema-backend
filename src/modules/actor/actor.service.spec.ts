@@ -1,11 +1,10 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { ActorService } from './actor.service';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { Actor } from './entities/actor.entity';
-import { CreateActorDto } from './dto/create-actor.dto';
+import { Actor } from './entities';
+import { CreateActorDto, UpdateActorDto } from './dto';
 import { NotFoundException, BadRequestException } from '@nestjs/common';
 import { Logger } from '@nestjs/common';
-import { UpdateActorDto } from './dto/update-actor.dto';
 
 describe('ActorService', () => {
   let actorService: ActorService;

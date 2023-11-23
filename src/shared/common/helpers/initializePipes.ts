@@ -5,7 +5,7 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 
-export default function initializePipes(app: INestApplication) {
+export function initializePipes(app: INestApplication) {
   app.useGlobalPipes(
     new ValidationPipe({
       transform: true,

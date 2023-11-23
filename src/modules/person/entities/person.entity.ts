@@ -6,9 +6,9 @@ import {
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { Ticket } from '../../ticket/entities/ticket.entity';
-import { Avatar } from '../../avatar/entities/avatar.entity';
-import { Token } from '../../token/entities/token.entity';
+import { Ticket } from '../../ticket/entities';
+import { Avatar } from '../../avatar/entities';
+import { Token } from '../../token/entities';
 
 @Entity('person')
 export class Person {

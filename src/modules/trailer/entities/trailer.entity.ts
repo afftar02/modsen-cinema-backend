@@ -5,7 +5,7 @@ import {
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { Preview } from '../../preview/entities/preview.entity';
+import { Preview } from '../../preview/entities';
 
 @Entity('trailer')
 export class Trailer {

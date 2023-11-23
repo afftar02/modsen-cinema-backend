@@ -1,19 +1,18 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { SeatService } from './seat.service';
-import { CreateSeatDto } from './dto/create-seat.dto';
-import { UpdateSeatDto } from './dto/update-seat.dto';
+import { CreateSeatDto, UpdateSeatDto } from './dto';
 import {
   BadRequestException,
   ConflictException,
   Logger,
   NotFoundException,
 } from '@nestjs/common';
-import { Seat } from './entities/seat.entity';
+import { Seat } from './entities';
 import { DataSource, Repository } from 'typeorm';
 import { SessionService } from '../session/session.service';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { Session } from '../session/entities/session.entity';
-import { Ticket } from '../ticket/entities/ticket.entity';
+import { Session } from '../session/entities';
+import { Ticket } from '../ticket/entities';
 
 describe('SeatService', () => {
   let seatService: SeatService;

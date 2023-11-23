@@ -13,8 +13,8 @@ import { ApiBearerAuth, ApiBody, ApiConsumes, ApiTags } from '@nestjs/swagger';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { fileStorage } from '../../shared/common/storage';
 import { IMAGE_EXT, IMAGE_SIZE_LIMIT } from '../../shared/common/constants';
-import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
-import { UserId } from '../../shared/common/decorators/user-id.decorator';
+import { JwtAuthGuard } from '../auth/guards';
+import { UserId } from '../../shared/common/decorators';
 
 @Controller('avatar')
 @ApiTags('Avatar')

@@ -1,10 +1,9 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { SessionService } from './session.service';
-import { CreateSessionDto } from './dto/create-session.dto';
-import { UpdateSessionDto } from './dto/update-session.dto';
+import { CreateSessionDto, UpdateSessionDto } from './dto';
 import { MovieService } from '../movie/movie.service';
-import { Session } from './entities/session.entity';
-import { Movie } from '../movie/entities/movie.entity';
+import { Session } from './entities';
+import { Movie } from '../movie/entities';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import {
   BadRequestException,
@@ -12,7 +11,7 @@ import {
   Logger,
   NotFoundException,
 } from '@nestjs/common';
-import { Seat } from '../seat/entities/seat.entity';
+import { Seat } from '../seat/entities';
 
 describe('SessionService', () => {
   let sessionService: SessionService;
