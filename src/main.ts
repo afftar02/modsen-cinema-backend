@@ -1,14 +1,13 @@
-import { NestFactory } from '@nestjs/core';
+import { HttpAdapterHost, NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import {
-  BadRequestException,
-  ValidationPipe,
-  ValidationError,
-} from '@nestjs/common';
-import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import * as express from 'express';
 import { WinstonModule } from 'nest-winston';
 import { instance } from '../logger/winston.logger';
+import { initializePipes } from './shared/common/helpers';
+import { initializeSwagger } from './shared/common/helpers';
+import { ConfigService } from '@nestjs/config';
+import { AllExceptionsFilter } from './shared/common/filters';
+import { OrmExceptionFilter } from './shared/common/filters';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
@@ -18,34 +17,19 @@ async function bootstrap() {
   });
 
   app.enableCors({ credentials: true, origin: true });
-  app.useGlobalPipes(
-    new ValidationPipe({
-      transform: true,
-      exceptionFactory: (validationErrors: ValidationError[] = []) => {
-        const errors = validationErrors.map((error) => ({
-          property: error.property,
-          constraints: error.constraints,
-        }));
-
-        return new BadRequestException(errors);
-      },
-    }),
-  );
+  initializePipes(app);
   app.use('/uploads', express.static('uploads'));
+  initializeSwagger(app);
 
-  const config = new DocumentBuilder()
-    .setTitle('Cinema-modsen')
-    .setVersion('1.0')
-    .addBearerAuth()
-    .build();
-  const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('swagger', app, document, {
-    swaggerOptions: {
-      persistAuthorization: true,
-      tagsSorter: 'alpha',
-    },
-  });
+  const { httpAdapter } = app.get(HttpAdapterHost);
+  app.useGlobalFilters(
+    new AllExceptionsFilter(httpAdapter),
+    new OrmExceptionFilter(),
+  );
 
-  await app.listen(process.env.PORT || 8080);
+  const configService = app.get(ConfigService);
+  const port = configService.get<string>('PORT');
+
+  await app.listen(port);
 }
 bootstrap();
