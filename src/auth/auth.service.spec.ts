@@ -11,6 +11,7 @@ import { ForbiddenException, Logger } from '@nestjs/common';
 import { AvatarService } from '../avatar/avatar.service';
 import { Token } from '../token/entities/token.entity';
 import * as dotenv from 'dotenv';
+import { ConfigService } from '@nestjs/config';
 
 describe('AuthService', () => {
   let authService: AuthService;
@@ -67,6 +68,7 @@ describe('AuthService', () => {
           provide: getRepositoryToken(Token),
           useValue: mockRepository,
         },
+        ConfigService,
       ],
     }).compile();
 

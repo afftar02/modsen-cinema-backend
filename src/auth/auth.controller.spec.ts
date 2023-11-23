@@ -8,6 +8,7 @@ import { JwtService } from '@nestjs/jwt';
 import { TokenService } from '../token/token.service';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Token } from '../token/entities/token.entity';
+import { ConfigService } from '@nestjs/config';
 
 describe('AuthController', () => {
   let authController: AuthController;
@@ -48,6 +49,7 @@ describe('AuthController', () => {
           provide: getRepositoryToken(Token),
           useValue: mockRepository,
         },
+        ConfigService,
       ],
     }).compile();
 
