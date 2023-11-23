@@ -9,7 +9,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Avatar } from './entities/avatar.entity';
 import { Repository } from 'typeorm';
 import * as fs from 'fs';
-import { FILES_PATH } from '../shared/common/constants';
+import { FILES_PATH } from '../../shared/common/constants';
 
 @Injectable()
 export class AvatarService {

@@ -1,9 +1,9 @@
-import { Review } from 'src/review/entities/review.entity';
-import { Country } from 'src/country/entities/country.entity';
-import { Actor } from 'src/actor/entities/actor.entity';
-import { Genre } from 'src/genre/entities/genre.entity';
-import { Poster } from 'src/poster/entities/poster.entity';
-import { Trailer } from 'src/trailer/entities/trailer.entity';
+import { Review } from 'src/modules/review/entities/review.entity';
+import { Country } from 'src/modules/country/entities/country.entity';
+import { Actor } from 'src/modules/actor/entities/actor.entity';
+import { Genre } from 'src/modules/genre/entities/genre.entity';
+import { Poster } from 'src/modules/poster/entities/poster.entity';
+import { Trailer } from 'src/modules/trailer/entities/trailer.entity';
 import { Movie } from '../entities/movie.entity';
 
 export class FindMovieDto {

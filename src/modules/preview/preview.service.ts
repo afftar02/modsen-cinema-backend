@@ -2,7 +2,7 @@ import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import * as fs from 'fs';
-import { FILES_PATH } from '../shared/common/constants';
+import { FILES_PATH } from '../../shared/common/constants';
 import { Preview } from './entities/preview.entity';
 
 @Injectable()

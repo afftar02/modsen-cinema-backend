@@ -10,12 +10,12 @@ import {
 import { TrailerService } from './trailer.service';
 import { ApiBody, ApiConsumes, ApiTags } from '@nestjs/swagger';
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
-import { fileStorage } from '../shared/common/storage';
+import { fileStorage } from '../../shared/common/storage';
 import {
   IMAGE_EXT,
   VIDEO_EXT,
   VIDEO_SIZE_LIMIT,
-} from '../shared/common/constants';
+} from '../../shared/common/constants';
 
 @Controller('trailer')
 @ApiTags('Trailer')

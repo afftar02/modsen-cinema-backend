@@ -8,7 +8,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Poster } from './entities/poster.entity';
 import * as fs from 'fs';
-import { FILES_PATH } from '../shared/common/constants';
+import { FILES_PATH } from '../../shared/common/constants';
 
 @Injectable()
 export class PosterService {
